@@ -12,13 +12,12 @@ public:
         int label_;
 
         vector<float> aux_feature_vec_;
-
-        static vector<Sample> train_sample_vec;
+        static vector<Sample> train_sample_vec_;
 public:
         Sample(){};
-        Sample(Size& s, int label=0);
+        Sample::Sample(Size& s, int label=0);
         Sample(unsigned int patch_width, unsigned int patch_height, int label);
-        Sample(Mat& gray_img, int label=0);
+        Sample(Mat& img, int label=0);
         Sample(Size& size, FeatureChannel& fc, int label=0);
 
         bool isPositive();
@@ -38,7 +37,7 @@ public:
         static void genRandomSample(const vector<Mat>& img_vec, vector<Sample>& sample_vec, 
                                                 Size& sample_size, int label, unsigned max_sample_num);
 
-        static void genRandomSample(const string& img_path, vector<Sample>& sample_vec, Size& sample_size,
+        static void genRandomSample(string& img_path, vector<Sample>& sample_vec, Size& sample_size,
                                                 int label, unsigned max_sample_num);
 
         static void genRandomNegSample(string& img_path, vector<Sample>& sample_vec, Size& sample_size,

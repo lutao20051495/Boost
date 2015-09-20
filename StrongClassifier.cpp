@@ -1,8 +1,13 @@
 #include "StrongClassifier.h"
+#include "File.h"
 
-void StrongClassifier::Train(vector<size_t>& sample_index_vec, unsigned int weak_clf_num)
+void StrongClassifier::Train(vector<size_t>& sample_index_vec, unsigned int weak_clf_num, string& save_model_dir)
 {
-        vector<Sample>& train_sample_vec = Sample::train_sample_vec;
+        if(!FileExist(save_model_dir))
+        {
+                CreateDir(save_model_dir);
+        }
+        vector<Sample>& train_sample_vec = Sample::train_sample_vec_;
         //init weight
         vector<float> sample_weight_vec(sample_index_vec.size(), 1.0f/sample_index_vec.size());
 
@@ -16,6 +21,9 @@ void StrongClassifier::Train(vector<size_t>& sample_index_vec, unsigned int weak
                 if (weak_clf.pfeature_&&weak_clf.err_rate_<max_err_rate_)
                 {
                         weak_clf_vec_.push_back(weak_clf);
+                        char sv_dir[128];
+                        sprintf(sv_dir, "%s/weak_clf_%d", save_model_dir.c_str(), weak_clf_vec_.size());
+                        weak_clf.Save(string(sv_dir));
                 }
                 else
                 {

@@ -25,4 +25,6 @@ public:
                      float& sum_neg_weight);
 
         int Predict(Sample& sample);
-};
+
+        void Save(string& save_dir);
+};         

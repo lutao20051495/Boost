@@ -6,7 +6,7 @@ using namespace std;
 #include <opencv2/opencv.hpp>
 using namespace cv;
 
-#ifdef WINDOWS
+#ifdef WIN32
     #include <windows.h>
 #else
     #include <sys/types.h>
@@ -19,8 +19,10 @@ using namespace cv;
 */
 bool FileExist(const string &name);
 
-void readFileName(const string& imgFilePath, string& type, vector<string> &imgNames);
+bool GetFileName(const string& imgFilePath, const string& type, vector<string> &imgNames);
 
 void readImage(const string& img_path, const string& type, vector<Mat>& img_vec, int num = 10000000);
 
 void readFileNameMultiDir(string& file_path, string& type, vector<string>& img_name_vec, int max_dir_num);
+
+void CreateDir(string& dir_name);

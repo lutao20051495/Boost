@@ -12,7 +12,7 @@ using namespace cv;
 
 bool FileExist(const string &name)
 {
-#ifdef WINDOWS
+#ifdef WIN32
 	WIN32_FIND_DATAA   FindFileData; 
 	HANDLE   hFind   =   INVALID_HANDLE_VALUE;
 
@@ -45,11 +45,11 @@ string getFileNameExt(const string& file_name)
 /* Returns a list of files in a directory (except the ones that begin with a dot) */
 bool GetFileName(const string &directory, const string& type, std::vector<string> &out)
 {
-#ifdef WINDOWS
+#ifdef WIN32
 	HANDLE dir;
 	WIN32_FIND_DATA file_data;
 
-	if ((dir = FindFirstFile((directory + "/*" +).c_str(), &file_data)) == INVALID_HANDLE_VALUE)
+	if ((dir = FindFirstFile((directory + "/*").c_str(), &file_data)) == INVALID_HANDLE_VALUE)
 	{
 		cout << "no file found!" << endl;
 		return false; 
@@ -183,6 +183,18 @@ void readImage(const string& img_path, const string& type, vector<Mat>& img_vec,
                 if(img_vec.size() >= num)
                         break;
         }
+}
+
+
+
+void CreateDir(string& dir_name)
+{
+#ifdef WIN32
+        CreateDirectory(dir_name.c_str(), NULL);
+#else
+        mkdir(dir_name, 777);
+#endif
+        return;
 }
 
 

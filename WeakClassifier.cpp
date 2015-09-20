@@ -1,13 +1,17 @@
 
+#include <fstream>
+using namespace std;
+
 #include "WeakClassifier.h"
+#include "File.h"
 
 void WeakClassifier::Train(vector<size_t>& sample_index_vec, vector<float>& weight_vec)
 {
-        vector<Sample>& train_sample_vec = Sample::train_sample_vec;
+        vector<Sample>& train_sample_vec = Sample::train_sample_vec_;
 
         //gen feature pool
         vector<FEATURE_TYPE> feature_type_vec;
-        feature_type_vec.push_back(ACANGLE);
+        feature_type_vec.push_back(CHANNEL);
         vector<Feature*> pfeature_vec;
 	Size sample_size = train_sample_vec[sample_index_vec[0]].getSize();
         Feature::genFeaturePool(sample_size, feature_type_vec, pfeature_vec, 128);
@@ -74,7 +78,7 @@ void WeakClassifier::SplitSample(Feature* pfeature,
                                  vector<size_t>& left_index_vec,
                                  vector<size_t>& right_index_vec)
 {
-        vector<Sample>& sample_vec = Sample::train_sample_vec;
+        vector<Sample>& sample_vec = Sample::train_sample_vec_;
         for (unsigned int i=0; i<sample_index_vec.size(); i++)
         {
                 size_t index = sample_index_vec[i];
@@ -96,7 +100,7 @@ void WeakClassifier::SumSampleWeight(vector<size_t>& sample_index_vec,
                      float& sum_pos_weight,
                      float& sum_neg_weight)
 {
-        vector<Sample>& train_sample_vec = Sample::train_sample_vec;
+        vector<Sample>& train_sample_vec = Sample::train_sample_vec_;
         for(unsigned int i=0; i<sample_index_vec.size(); i++)
         {
                 size_t index = sample_index_vec[i];
@@ -124,4 +128,33 @@ int WeakClassifier::Predict(Sample& sample)
         {
                 return -polar_;
         }
+}
+
+
+void WeakClassifier::Save(string& save_dir)
+{
+        if(!FileExist(save_dir))
+        {
+                CreateDir(save_dir);
+        }
+        string weak_clf_path = save_dir + "/" + "weak_clf.txt";
+        fstream weak_clf_file(weak_clf_path.c_str(), ios::trunc);
+        if(!weak_clf_file)
+        {
+                cout << "Creating " << weak_clf_path << "failed!" << endl;
+                return;
+        }
+
+        weak_clf_file << "polar: " << polar_ << endl;
+        weak_clf_file << "err_rate: " << err_rate_ << endl;
+        weak_clf_file << "feature_type: " << (int)(pfeature_->feat_type_) << endl;
+        weak_clf_file.close();
+
+        //save feature
+        if(pfeature_)
+        {
+                pfeature_->save(save_dir);
+        }
+
+        return;
 }

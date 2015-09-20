@@ -1,11 +1,8 @@
-
-#include <stdio.h>
-
 #include "Sample.h"       
 #include "Patch.h"
 #include "File.h"
 
-vector<Sample> Sample::train_sample_vec = vector<Sample>(0);
+vector<Sample> Sample::train_sample_vec_ = vector<Sample>(0);
 
 Sample::Sample(Size& s, int label)
 {
@@ -24,8 +21,17 @@ Sample::Sample(unsigned int patch_width, unsigned int patch_height, int label)
         aux_feature_vec_.clear();
 }
 
-Sample::Sample(Mat& gray_img, int label)
+Sample::Sample(Mat& img, int label)
 {
+        Mat gray_img;
+        if(img.channels() > 1)
+        {
+                cvtColor(img, gray_img, CV_BGR2GRAY);
+        }
+        else
+        {
+                gray_img = img;
+        }
         width_ = gray_img.cols;
         height_ = gray_img.rows;
         label_ = label;
@@ -98,7 +104,7 @@ void Sample::loadMultiDir(string& sample_dir, string& sub_dir_prefix, int start_
 }
 
 
-void Sample::genRandomSample(const string& img_path, vector<Sample>& sample_vec, 
+void Sample::genRandomSample(string& img_path, vector<Sample>& sample_vec, 
                                 Size& sample_size, int label, unsigned max_sample_num)
 {
         vector<Mat> img_vec;
@@ -140,8 +146,7 @@ void Sample::getPatch(Rect& roi, Sample& sample_patch)
 {
         FeatureChannel fc_patch;
         fc_.getPatch(roi, fc_patch);
-	Size patch_size = roi.size();
-        sample_patch = Sample(patch_size, fc_patch);
+        sample_patch = Sample(roi.size(), fc_patch);
         return;
 }
 

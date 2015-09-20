@@ -1,22 +1,22 @@
 #include "Feature.h"
-#include "Acangle.h"
+#include "ChannelFeature.h"
 
 Feature::Feature(FEATURE_TYPE feat_type)
 {
         feat_type_ = feat_type;
 }
 
-bool Feature::save(string& save_dir) const
+bool Feature::save(string& save_dir) 
 {
         return false;
 }
 
- int Feature::featureValue(const Sample& sample) const
+ int Feature::featureValue(const Sample& sample) 
 {
         return -1;
 }
 
-double Feature::AbsoluteValue(const Sample& sample) const
+double Feature::sumValue(const Sample& sample) 
 {
         return 0.0;
 }
@@ -59,7 +59,7 @@ bool Feature::genFeaturePool(Size& img_size, vector<FEATURE_TYPE>& feature_type_
                 switch(feature_type)
                 {
                 case ACANGLE:
-                        Acangle::genAcanglePool(img_size, feature_vec, num);
+                        //Acangle::genAcanglePool(img_size, feature_vec, num);
                         break;
                 default:
                         cout << "error!" << endl;
@@ -80,7 +80,10 @@ bool Feature::genFeaturePool(Size& img_size, vector<FEATURE_TYPE>& feature_type_
                 switch(feature_type)
                 {
                 case ACANGLE:
-                        Acangle::genAcanglePool(img_size, pfeature_vec, num);
+                        //Acangle::genAcanglePool(img_size, pfeature_vec, num);
+                        break;
+                case CHANNEL:
+                        ChannelFeature::genChannelFeaturePool(img_size, pfeature_vec, num);
                         break;
                 default:
                         cout << "error!" << endl;
@@ -92,16 +95,17 @@ bool Feature::genFeaturePool(Size& img_size, vector<FEATURE_TYPE>& feature_type_
 }
 
 
-void Feature::FreeFeaturePool(vector<Feature*> &pfeature_vec, size_t exclude_index)
+void Feature::FreeFeaturePool(vector<Feature*>& pfeature_vec, int exclude_index)
 {
-        for (unsigned int i=0; i<pfeature_vec.size(); i++)
+        for(unsigned int i=0; i<pfeature_vec.size(); i++)
         {
-                if(i != exclude_index)
+                if (i!=exclude_index)
                 {
                         delete pfeature_vec[i];
                 }
         }
 }
+
 
 void Feature::genFeatureThreshold(vector<Sample>& sample_vec, vector<size_t>& sample_index_vec, vector<Feature>& feature_vec)
 {
@@ -113,13 +117,13 @@ void Feature::genFeatureThreshold(vector<Sample>& sample_vec, vector<size_t>& sa
         {
                 int rand_index = rng.uniform(0, sample_vec.size());
                 Sample &sample = sample_vec[rand_index];
-                min_thresh = feature_vec[i].AbsoluteValue(sample);
+                min_thresh = feature_vec[i].sumValue(sample);
                 max_thresh = min_thresh;
                 int num = 0;
                 while(num < 100)
                 {
                         rand_index = rng.uniform(0, sample_vec.size());
-                        double value = feature_vec[i].AbsoluteValue(sample_vec[rand_index]);
+                        double value = feature_vec[i].sumValue(sample_vec[rand_index]);
                         if(min_thresh > value)
                                 min_thresh = value;
                         if(max_thresh < value)
@@ -144,7 +148,7 @@ void Feature::genFeatureThreshold(vector<Sample>& sample_vec, vector<size_t>& sa
                 rand_index = sample_index[rand_index];
 
                 Sample& sample = sample_vec[rand_index];
-                min_thresh = pfeature_vec[i]->AbsoluteValue(sample);
+                min_thresh = pfeature_vec[i]->sumValue(sample);
                 max_thresh = min_thresh;
                 int num = 0;
                 while(num < 100)
@@ -152,40 +156,7 @@ void Feature::genFeatureThreshold(vector<Sample>& sample_vec, vector<size_t>& sa
                         rand_index = rng.uniform(0, sample_index.size());
                         rand_index = sample_index[rand_index];
 
-                        double value = pfeature_vec[i]->AbsoluteValue( sample_vec[rand_index] );
-                        if(min_thresh > value)
-                                min_thresh = value;
-                        if(max_thresh < value)
-                                max_thresh = value;
-                        num++;
-                }
-                double thresh = rng.uniform(min_thresh, max_thresh);
-                //cout << "thresh: " << thresh << endl;
-                pfeature_vec[i]->setThresh(thresh);
-        }
-}
-
-
-
-void Feature::genFeatureThreshold(vector<Sample>& sample_vec, vector<Feature*>& pfeature_vec)
-{
-        //随机数生成器
-        RNG rng( getTickCount() );
-        double min_thresh = 0.0;
-        double max_thresh = 0.0;
-        for(unsigned i=0; i<pfeature_vec.size(); i++)
-        {
-                int rand_index = rng.uniform(0, sample_vec.size());
-                Sample& sample = sample_vec[rand_index];
-
-                min_thresh = pfeature_vec[i]->AbsoluteValue(sample);
-                max_thresh = min_thresh;
-                int num = 0;
-                while(num < sample_vec.size()*0.25)
-                {
-                        rand_index = rng.uniform(0, sample_vec.size());
-
-                        double value = pfeature_vec[i]->AbsoluteValue( sample_vec[rand_index] );
+                        double value = pfeature_vec[i]->sumValue( sample_vec[rand_index] );
                         if(min_thresh > value)
                                 min_thresh = value;
                         if(max_thresh < value)
