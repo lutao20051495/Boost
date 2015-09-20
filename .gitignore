@@ -40,4 +40,8 @@ ReleaseStatic
 *.workspace
 *.session
 
+#vs
+*.sln
+*.vcproj
+
 
