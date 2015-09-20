@@ -9,7 +9,8 @@ void WeakClassifier::Train(vector<size_t>& sample_index_vec, vector<float>& weig
         vector<FEATURE_TYPE> feature_type_vec;
         feature_type_vec.push_back(ACANGLE);
         vector<Feature*> pfeature_vec;
-        Feature::genFeaturePool(train_sample_vec[sample_index_vec[0]].getSize(), feature_type_vec, pfeature_vec, 128);
+	Size sample_size = train_sample_vec[sample_index_vec[0]].getSize();
+        Feature::genFeaturePool(sample_size, feature_type_vec, pfeature_vec, 128);
         Feature::genFeatureThreshold(train_sample_vec, sample_index_vec, pfeature_vec);
 
         //select optimal feature

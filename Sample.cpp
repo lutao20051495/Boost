@@ -1,3 +1,6 @@
+
+#include <stdio.h>
+
 #include "Sample.h"       
 #include "Patch.h"
 #include "File.h"
@@ -95,7 +98,7 @@ void Sample::loadMultiDir(string& sample_dir, string& sub_dir_prefix, int start_
 }
 
 
-void Sample::genRandomSample(string& img_path, vector<Sample>& sample_vec, 
+void Sample::genRandomSample(const string& img_path, vector<Sample>& sample_vec, 
                                 Size& sample_size, int label, unsigned max_sample_num)
 {
         vector<Mat> img_vec;
@@ -137,7 +140,8 @@ void Sample::getPatch(Rect& roi, Sample& sample_patch)
 {
         FeatureChannel fc_patch;
         fc_.getPatch(roi, fc_patch);
-        sample_patch = Sample(roi.size(), fc_patch);
+	Size patch_size = roi.size();
+        sample_patch = Sample(patch_size, fc_patch);
         return;
 }
 

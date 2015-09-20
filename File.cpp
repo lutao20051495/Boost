@@ -3,15 +3,16 @@ using namespace std;
 
 #include <opencv2/opencv.hpp>
 using namespace cv;
+#include <stdio.h>
 #include "File.h"
 /*
-功能:
- 检查给定的文件(或者目录)是否存在.
+鹿娄脛脺:
+ 录矛虏茅赂酶露篓碌脛脦脛录镁(禄貌脮脽脛驴脗录)脢脟路帽麓忙脭脷.
 */
 
 bool FileExist(const string &name)
 {
-
+#ifdef WINDOWS
 	WIN32_FIND_DATAA   FindFileData; 
 	HANDLE   hFind   =   INVALID_HANDLE_VALUE;
 
@@ -23,37 +24,92 @@ bool FileExist(const string &name)
 	{
 		return false;
 	}
-}
-
-// 内存不足，图像逐一读入
-void readFileName(const string& imgFilePath,string& type,vector<string> &imgNames)
-{	
-	imgNames.clear();
-
-	char tmpDirSpec[MAX_PATH+1];
-        sprintf (tmpDirSpec, "%s/*.%s", imgFilePath.c_str(), type.c_str());
-
-	WIN32_FIND_DATA f;
-	HANDLE h = FindFirstFile(tmpDirSpec , &f);
-
-	if(h != INVALID_HANDLE_VALUE)
+#else
+	if (opendir(name.c_str()))
 	{
-                if(type == "*")
-                {
-		        FindNextFile(h, &f);	//read ..
-		        FindNextFile(h, &f);	//read .
-                }
-		do
-		{
-			imgNames.push_back(f.cFileName);
-		} while(FindNextFile(h, &f));
-
+		return true; 
 	}
-	FindClose(h);	
+	else
+	{
+		return false;
+	}
+#endif
 }
 
+/* Get file name extension */
+string getFileNameExt(const string& file_name)
+{
+	return file_name.substr(file_name.find_last_of('.')+1);
+}
 
-//读取子文件夹下的文件名
+/* Returns a list of files in a directory (except the ones that begin with a dot) */
+bool GetFileName(const string &directory, const string& type, std::vector<string> &out)
+{
+#ifdef WINDOWS
+	HANDLE dir;
+	WIN32_FIND_DATA file_data;
+
+	if ((dir = FindFirstFile((directory + "/*" +).c_str(), &file_data)) == INVALID_HANDLE_VALUE)
+	{
+		cout << "no file found!" << endl;
+		return false; 
+	}
+	do {
+		const string file_name = file_data.cFileName;
+		const bool is_directory = (file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+
+		if (file_name[0] == '.')
+			continue;
+
+		if (is_directory)
+			continue;
+	
+		if (getFileNameExt(file_name)==type)
+		{
+			out.push_back(file_name);
+		}
+	} while (FindNextFile(dir, &file_data));
+	FindClose(dir);
+    
+#else
+    DIR *dir;
+    class dirent *ent;
+    class stat st;
+
+    dir = opendir(directory.c_str());
+    if(!dir)
+    {
+	    cout << "no files found in " << directory << endl;
+	    return false;
+    }
+    while ((ent = readdir(dir)) != NULL) 
+    {
+	    const string file_name = ent->d_name;
+
+	    if (file_name[0] == '.')
+		continue;
+		
+	    const string full_file_name = directory + "/" + file_name;
+	    if (stat(full_file_name.c_str(), &st) == -1)
+		continue;
+
+	    const bool is_directory = (st.st_mode & S_IFDIR) != 0;
+
+	    if (is_directory)
+		continue;
+	
+	    if (getFileNameExt(file_name)==type)
+	    {
+		    out.push_back(file_name);
+	    }
+    }
+    closedir(dir);
+#endif
+    return true;
+} // GetFilesInDirectory
+
+
+//露脕脠隆脳脫脦脛录镁录脨脧脗碌脛脦脛录镁脙没
 void readFileNameMultiDir(string& file_path, string& type, vector<string>& img_name_vec, int max_dir_num)
 {
         for(int i=0; i<max_dir_num; i++)
@@ -64,7 +120,7 @@ void readFileNameMultiDir(string& file_path, string& type, vector<string>& img_n
                 if( !FileExist(dir))
                         continue;
                 vector<string> img_name_vec;
-                readFileName(dir, type, img_name_vec);
+                GetFileName(dir, type, img_name_vec);
                 for(size_t i=0; i<img_name_vec.size(); i++)
                 {
                         string file_name = dir + "//" + img_name_vec[i];
@@ -75,7 +131,7 @@ void readFileNameMultiDir(string& file_path, string& type, vector<string>& img_n
 }
 
 
-//递归读取当前文件下的所有文件
+//碌脻鹿茅露脕脠隆碌卤脟掳脦脛录镁脧脗碌脛脣霉脫脨脦脛录镁
 /*
 void readAllFileName(string& file_path, string& type, vector<string>& file_name_vec)
 {
@@ -102,8 +158,8 @@ void readAllFileName(string& file_path, string& type, vector<string>& file_name_
             }
             else   
             {
-                //找到一个文件，strFoundFileName为文件名
-                //在此添加处理
+                //脮脪碌陆脪禄赂枚脦脛录镁拢卢strFoundFileName脦陋脦脛录镁脙没
+                //脭脷麓脣脤铆录脫麓娄脌铆
             }   
         }
          
@@ -113,10 +169,10 @@ void readAllFileName(string& file_path, string& type, vector<string>& file_name_
 }
 */
 
-void readImage(string& img_path, string& type, vector<Mat>& img_vec, int num)
+void readImage(const string& img_path, const string& type, vector<Mat>& img_vec, int num)
 {
         vector<string> img_name_vec;
-        readFileName(img_path, type, img_name_vec);
+        GetFileName(img_path, type, img_name_vec);
         for(unsigned i=0; i<img_name_vec.size(); i++)
         {
                 string img_name = img_path + "\\" + img_name_vec[i];

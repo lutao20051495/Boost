@@ -10,22 +10,22 @@ using namespace std;
 class FeatureChannel
 {
 public:
-	//�Ҷ�ͼ
+	//»Ò¶ÈÍ¼
 	Mat    gray_img_;
 
-        //���ֻҶ�ͼ
+        //»ý·Ö»Ò¶ÈÍ¼
 	Mat    integral_gray_img_;
         Mat    integral_mag_img_;
 
-        //�ݶ�ͼ
+        //ÌÝ¶ÈÍ¼
         Mat     gradient_mag_img_;
         Mat     gradient_angle_img_;
 
-        //�ݶ��ݶ�ͼ
+        //ÌÝ¶ÈÌÝ¶ÈÍ¼
         Mat     gradient_mag_mag_img_;
         Mat     gradient_mag_angle_img_;
 
-        //ct ͼ
+        //ct Í¼
         Mat ct_img_;
 public:
         FeatureChannel(void);
@@ -33,18 +33,18 @@ public:
 
         void calIntegralImage(void);
 
-        void FeatureChannel::calGradient(int dy, int dx, int &magnitude, int &angle);
+        void calGradient(int dy, int dx, int &magnitude, int &angle);
 
-        void FeatureChannel::calGradientImage(void);
+        void calGradientImage(void);
 
-        void FeatureChannel::calGradientImageOnMag(void);
+        void calGradientImageOnMag(void);
 
-        void FeatureChannel::calCtImage(void);
+        void calCtImage(void);
 
-        void FeatureChannel::calFeatureChannel(Mat& gray_img);
+        void calFeatureChannel(Mat& gray_img);
 
-        void FeatureChannel::cropTo(FeatureChannel& patch_fc, Rect& roi);
+        void cropTo(FeatureChannel& patch_fc, Rect& roi);
 
-        void FeatureChannel::getPatch(Rect& roi, FeatureChannel& patch_fc);
+        void getPatch(Rect& roi, FeatureChannel& patch_fc);
 };
 #endif

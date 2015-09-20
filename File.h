@@ -6,15 +6,21 @@ using namespace std;
 #include <opencv2/opencv.hpp>
 using namespace cv;
 
-#include <Windows.h>
+#ifdef WINDOWS
+    #include <windows.h>
+#else
+    #include <sys/types.h>
+    #include <dirent.h>
+    #include <sys/stat.h>
+#endif 
 /*
-功能:
- 检查给定的文件(或者目录)是否存在.
+鹿娄脛脺:
+ 录矛虏茅赂酶露篓碌脛脦脛录镁(禄貌脮脽脛驴脗录)脢脟路帽麓忙脭脷.
 */
 bool FileExist(const string &name);
 
 void readFileName(const string& imgFilePath, string& type, vector<string> &imgNames);
 
-void readImage(string& img_path, string& type, vector<Mat>& img_vec, int num = 10000000);
+void readImage(const string& img_path, const string& type, vector<Mat>& img_vec, int num = 10000000);
 
 void readFileNameMultiDir(string& file_path, string& type, vector<string>& img_name_vec, int max_dir_num);

@@ -6,7 +6,7 @@ using namespace std;
 
 
 /*
-构造函数.
+鹿鹿脭矛潞炉脢媒.
 */
 Acangle::Acangle(void):Feature(ACANGLE)
 {
@@ -49,10 +49,10 @@ Acangle::Acangle(int scale,Rect& rect, int low_degree, int up_degree,int theta, 
 
 
 /*
-功能:
-计算特征值.
-注意:
-我们在这里没有检查rect是否在patch的图片范围内. 因为在接下来的运算中,如果出现这种情况,会保存.
+鹿娄脛脺:
+录脝脣茫脤脴脮梅脰碌.
+脳垄脪芒:
+脦脪脙脟脭脷脮芒脌茂脙禄脫脨录矛虏茅rect脢脟路帽脭脷patch碌脛脥录脝卢路露脦搂脛脷. 脪貌脦陋脭脷陆脫脧脗脌麓碌脛脭脣脣茫脰脨,脠莽鹿没鲁枚脧脰脮芒脰脰脟茅驴枚,禄谩卤拢麓忙.
 */
 //int Acangle::featureValue(const Mat &gradient_mag_angle_img) const
 int Acangle::featureValue(const Sample& s) const
@@ -112,7 +112,7 @@ int Acangle::featureValue(const Sample& s) const
 
 double Acangle::AbsoluteValue(const Sample& sample) const
 {
-        //根据尺度选择相应角度图
+        //赂霉戮脻鲁脽露脠脩隆脭帽脧脿脫娄陆脟露脠脥录
         Mat angle_img;
         Mat mag_img;
         //switch(scale_)
@@ -165,7 +165,7 @@ double Acangle::AbsoluteValue(const Sample& sample) const
 /*
 double Acangle::AbsoluteValue(const Mat &gradient_mag_angle_img) const
 {
-        //根据尺度选择相应角度图
+        //赂霉戮脻鲁脽露脠脩隆脭帽脧脿脫娄陆脟露脠脥录
         Mat angle_img;
         switch(scale_)
         {
@@ -222,8 +222,8 @@ void Acangle::setThresh(double thresh)
         theta_ = thresh;
 }
 /*
-功能:
-保存特征.
+鹿娄脛脺:
+卤拢麓忙脤脴脮梅.
 */
 
 bool Acangle::save(string &save_dir) const
@@ -248,8 +248,8 @@ bool Acangle::save(string &save_dir) const
 
 
 /*
-功能:
-载入特征.
+鹿娄脛脺:
+脭脴脠毛脤脴脮梅.
 */
 bool Acangle::load(string& dir)
 {
@@ -259,7 +259,7 @@ bool Acangle::load(string& dir)
         {
                 return false;
         }
-        //装载数据
+        //脳掳脭脴脢媒戮脻
         string title;
 
         src_file  >> title;
@@ -295,11 +295,11 @@ void  Acangle::genAcanglePool(const Size &img_size, vector<Feature> &acangle_vec
         RNG rng( getTickCount() );
         while( cur_feature_num < max_num )
         {
-                //产生尺度(只产生1个尺度)
+                //虏煤脡煤鲁脽露脠(脰禄虏煤脡煤1赂枚鲁脽露脠)
                 //int scale = rng.uniform(0,2);          
                 int scale = 1;
                 //cout << "scale: " << scale << endl;
-                //产生区域(避开边缘点)
+                //虏煤脡煤脟酶脫貌(卤脺驴陋卤脽脭碌碌茫)
                 int min_w = img_size.width/6 ;
                 int min_h = img_size.height/6 ;
                 int w  = rng.uniform( min_w, img_size.width-4  +1 );
@@ -309,13 +309,13 @@ void  Acangle::genAcanglePool(const Size &img_size, vector<Feature> &acangle_vec
 
                 Rect zone(x,y, w,h);
 
-                //产生上下界
+                //虏煤脡煤脡脧脧脗陆莽
                 int s = rng.uniform(5, 45);
                 
                 int up_degree  = rng.uniform(-90+s, 91 );
                 int low_degree = up_degree - s;
 
-                //产生阀值
+                //虏煤脡煤路搂脰碌
                 int ave_hit = cvRound(s/180.0 * w*h);
                 int theta =  rng.uniform( 1, 2*ave_hit + w + h );
 
@@ -337,11 +337,11 @@ void  Acangle::genAcanglePool(const Size &img_size, vector<Feature*> &pacangle_v
         RNG rng( getTickCount() );
         while( cur_feature_num < max_num*3 )
         {
-                //产生尺度(只产生1个尺度)
+                //虏煤脡煤鲁脽露脠(脰禄虏煤脡煤1赂枚鲁脽露脠)
                 //int scale = rng.uniform(0,2);          
                 int scale = 1;
                 //cout << "scale: " << scale << endl;
-                //产生区域(避开边缘点)
+                //虏煤脡煤脟酶脫貌(卤脺驴陋卤脽脭碌碌茫)
                 int min_w = img_size.width/6 ;
                 int min_h = img_size.height/6 ;
                 int w  = rng.uniform( min_w, img_size.width-4  +1 );
@@ -351,13 +351,13 @@ void  Acangle::genAcanglePool(const Size &img_size, vector<Feature*> &pacangle_v
 
                 Rect zone(x,y, w,h);
 
-                //产生上下界
+                //虏煤脡煤脡脧脧脗陆莽
                 int s = rng.uniform(5, 45);
                 
                 int up_degree  = rng.uniform(-90+s, 91 );
                 int low_degree = up_degree - s;
 
-                //产生阀值
+                //虏煤脡煤路搂脰碌
                 int ave_hit = cvRound(s/180.0 * w*h);
                 int theta =  rng.uniform( 1, 2*ave_hit + w + h );
 

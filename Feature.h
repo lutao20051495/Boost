@@ -17,19 +17,19 @@ public:
 
         virtual int featureValue(const Sample& sample) const;
 
-        virtual double Feature::AbsoluteValue(const Sample& sample)const;
+        virtual double AbsoluteValue(const Sample& sample)const;
 
-        virtual void Feature::setThresh(double thresh);
+        virtual void setThresh(double thresh);
 
-        virtual bool Feature::save(string& save_dir) const;
+        virtual bool save(string& save_dir) const;
 
-        virtual bool Feature::load(string& src_dir);
+        virtual bool load(string& src_dir);
 
-        virtual void Feature::free(void);
+        virtual void free(void);
 
-        virtual void Feature::drawFeatureRect(Mat& img);
+        virtual void drawFeatureRect(Mat& img);
 
-        virtual Feature* Feature::cloneNewObject(void);
+        virtual Feature* cloneNewObject(void);
 
         static bool genFeaturePool(Size& img_size, vector<FEATURE_TYPE>& feature_type_vec, vector<Feature>& feature_vec, int num);
         static bool genFeaturePool(Size& img_size, vector<FEATURE_TYPE>& feature_type_vec, vector<Feature*>& pfeature_vec, int num);

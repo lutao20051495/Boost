@@ -10,52 +10,52 @@ using namespace cv;
 class Acangle:public Feature
 {
 public:
-        //³ß¶È
+        //Â³ÃŸÂ¶Ãˆ
         int scale_;
 
-        //ÇøÓòa
+        //Ã‡Ã¸Ã“Ã²a
         Rect    rect_;
 
-        //Ö¸Ê¾
+        //Ã–Â¸ÃŠÂ¾
         int  up_degree_;
 
         int  low_degree_;
 
-        //·§Öµ
+        //Â·Â§Ã–Âµ
         double  theta_;
 
 public:
-        //¹¹Ôìº¯Êı
+        //Â¹Â¹Ã”Ã¬ÂºÂ¯ÃŠÃ½
         Acangle(void);
         Acangle(enum FEATURE_TYPE feature_type);
-        Acangle::Acangle(Acangle& acg);
+        Acangle(Acangle& acg);
         Acangle(int scale, Rect& rect, int low_degree, int up_degree,int theta);
         Acangle(int scale,Rect& rect, int low_degree, int up_degree,int theta, enum FEATURE_TYPE feature_type);
-        //ÌØÕ÷Öµ
+        //ÃŒÃ˜Ã•Ã·Ã–Âµ
         //int featureValue(const Mat& gradient_mag_angle_img) const;
         int featureValue(const Sample& sample) const;
 
-        //¾ø¶ÔÁ¿
+        //Â¾Ã¸Â¶Ã”ÃÂ¿
         //double AbsoluteValue(const Mat& gradient_mag_angle_img) const;
-        double Acangle::AbsoluteValue(const Sample& sample) const;
+        double AbsoluteValue(const Sample& sample) const;
 
-        void Acangle::setThresh(double thresh);
-        //±£´æ
+        void setThresh(double thresh);
+        //Â±Â£Â´Ã¦
         bool save( string& save_dir) const;
 
-        //ÔØÈë
+        //Ã”Ã˜ÃˆÃ«
         bool load( string& src_dir);
 
-        //ÊÇ·ñ¸²¸ÇÁËÇ°¾°
+        //ÃŠÃ‡Â·Ã±Â¸Â²Â¸Ã‡ÃÃ‹Ã‡Â°Â¾Â°
         //bool CoverForground(const TriparePatch &patch) const;
 
-        Acangle* Acangle::cloneNewObject(void);
+        Acangle* cloneNewObject(void);
 
-        void Acangle::free(void);
-        void Acangle::drawFeatureRect(Mat& img);
+        void free(void);
+        void drawFeatureRect(Mat& img);
 
 public:
-        //»­³öÌØÕ÷
+        //Â»Â­Â³Ã¶ÃŒÃ˜Ã•Ã·
         void Plot(Mat &rgb_img);
 
 public:
