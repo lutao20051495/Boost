@@ -18,11 +18,11 @@ FeatureChannel::FeatureChannel(Mat& gray_img)
         //calGradientImageOnMag();
         //calCtImage();
         */
-        feature_channel_vec_.resize(8);
+        feature_channel_vec_.resize(feature_channel_num_);
         calIntegralImage(gray_img, feature_channel_vec_[0]);
         Mat mag_img, angle_img;
         calGradientImage(gray_img, mag_img, angle_img);
-        imshow("mag", mag_img);
+        //imshow("mag", mag_img);
         calIntegralImage(mag_img, feature_channel_vec_[1]);
 
         vector<Mat> angle_img_vec;
@@ -31,10 +31,10 @@ FeatureChannel::FeatureChannel(Mat& gray_img)
         {
                 char name[100];
                 sprintf(name, "anlge image %d", i);
-                imshow(string(name), angle_img_vec[i]);
+                //imshow(string(name), angle_img_vec[i]);
                 calIntegralImage(angle_img_vec[i], feature_channel_vec_[2+i]);
         }
-        waitKey();
+        //waitKey();
 }
 
 
