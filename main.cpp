@@ -16,12 +16,12 @@ int main(int argc,char *argv[])
                 }
         case 2:
                 {
-                        //TestMr(string(argv[2]), string(argv[3]),atof(argv[4]));
+                        //TestMrAdaboost(string(argv[2]), string(argv[3]),atof(argv[4]));
                         break;
                 }
         case 3:
                 {
-                        //TestFpr(string(argv[2]), string(argv[3]),atof(argv[4]));
+                        //TestFprAdaboost(string(argv[2]), string(argv[3]),atof(argv[4]));
                         break;
                 }
         case 4:

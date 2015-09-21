@@ -9,5 +9,6 @@ public:
         float max_err_rate_;
         float thresh_;
 public:
+        StrongClassifier();
         void Train(vector<size_t>& sample_index_vec, unsigned int weak_clf_num, const string& save_model_dir);
 };

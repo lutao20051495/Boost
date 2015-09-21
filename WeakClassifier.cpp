@@ -13,7 +13,7 @@ void WeakClassifier::Train(vector<size_t>& sample_index_vec, vector<float>& weig
         vector<FEATURE_TYPE> feature_type_vec;
         feature_type_vec.push_back(CHANNEL);
         vector<Feature*> pfeature_vec;
-	Size sample_size = train_sample_vec[sample_index_vec[0]].getSize();
+        Size sample_size = train_sample_vec[sample_index_vec[0]].getSize();
         Feature::genFeaturePool(sample_size, feature_type_vec, pfeature_vec, 128);
         Feature::genFeatureThreshold(train_sample_vec, sample_index_vec, pfeature_vec);
 
@@ -35,7 +35,7 @@ void WeakClassifier::Train(vector<size_t>& sample_index_vec, vector<float>& weig
 size_t WeakClassifier::SelectOptimalFeature(vector<Feature*>& pfeature_vec,
                                                 vector<size_t>& sample_index_vec,
                                                 vector<float>& weight_vec,
-                                                int polar,
+                                                int& polar,
                                                 float& min_err_rate)
 {
         min_err_rate = 1.0;
@@ -100,6 +100,8 @@ void WeakClassifier::SumSampleWeight(vector<size_t>& sample_index_vec,
                      float& sum_pos_weight,
                      float& sum_neg_weight)
 {
+        sum_pos_weight = 0.0f;
+        sum_neg_weight = 0.0f;
         vector<Sample>& train_sample_vec = Sample::train_sample_vec_;
         for(unsigned int i=0; i<sample_index_vec.size(); i++)
         {
@@ -138,7 +140,7 @@ void WeakClassifier::Save(const string& save_dir)
                 CreateDir(save_dir);
         }
         string weak_clf_path = save_dir + "/" + "weak_clf.txt";
-        fstream weak_clf_file(weak_clf_path.c_str(), ios::trunc);
+        fstream weak_clf_file(weak_clf_path.c_str(), ios::out);
         if(!weak_clf_file)
         {
                 cout << "Creating " << weak_clf_path << "failed!" << endl;
@@ -154,6 +156,16 @@ void WeakClassifier::Save(const string& save_dir)
         if(pfeature_)
         {
                 pfeature_->save(save_dir);
+        }
+
+        return;
+}
+
+void WeakClassifier::FreeFeature()
+{
+        if(pfeature_)
+        {
+                delete pfeature_;
         }
 
         return;

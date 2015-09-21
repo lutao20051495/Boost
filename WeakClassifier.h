@@ -11,7 +11,7 @@ public:
         size_t SelectOptimalFeature(vector<Feature*>& pfeature_vec,
                                                 vector<size_t>& sample_index_vec,
                                                 vector<float>& weight_vec,
-                                                int polar,
+                                                int& polar,
                                                 float& min_err_rate);
         void SplitSample(Feature* pfeature,
                                  vector<size_t>& sample_index_vec, 
@@ -27,4 +27,6 @@ public:
         int Predict(Sample& sample);
 
         void Save(const string& save_dir);
+
+        void FreeFeature();
 };         
