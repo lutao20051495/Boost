@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "FeatureChannel.h"
 
 int FeatureChannel::feature_channel_num_ = 8;
@@ -71,7 +72,7 @@ void FeatureChannel::calGradient(int dy, int dx, int &magnitude, int &angle)
 		return;
 	}
 
-	magnitude = cvRound( sqrt(  ( 1.0f*dy*dy*dy*dy+1.0f*dx*dx*dx*dx )/(1.0f*dy*dy+1.0f*dx*dx ) ) );//注意溢出问题
+	magnitude = cvRound( sqrt(  ( 1.0f*dy*dy*dy*dy+1.0f*dx*dx*dx*dx )/(1.0f*dy*dy+1.0f*dx*dx ) ) );//脳垄脪芒脪莽鲁枚脦脢脤芒
 	
 	
 
@@ -89,7 +90,7 @@ void FeatureChannel::calGradient(int dy, int dx, int &magnitude, int &angle)
 
 
 /*
-功能: 计算一张灰度图的梯度图	
+鹿娄脛脺: 录脝脣茫脪禄脮脜禄脪露脠脥录碌脛脤脻露脠脥录	
 */
 void FeatureChannel::calGradientImage(Mat& gray_img, Mat& mag_img, Mat& angle_img)
 {
@@ -120,7 +121,7 @@ void FeatureChannel::calGradientImage(Mat& gray_img, Mat& mag_img, Mat& angle_im
 }
 
 /*
- 在梯度图上计算梯度方向图
+ 脭脷脤脻露脠脥录脡脧录脝脣茫脤脻露脠路陆脧貌脥录
 */
 /*
 void FeatureChannel::calGradientImageOnMag(void)
@@ -208,7 +209,7 @@ void FeatureChannel::cropTo(FeatureChannel& patch_fc, Rect& roi)
 
 void FeatureChannel::splitAngleImage(Mat& angle_img, Mat& mag_img, vector<Mat>& angle_img_vec)
 {
-        //分为6个bin
+        //路脰脦陋6赂枚bin
         int bin = 6;
         angle_img_vec.resize(6);
         for(size_t i=0; i<bin; i++)
@@ -236,7 +237,7 @@ void FeatureChannel::splitAngleImage(Mat& angle_img, Mat& mag_img, vector<Mat>& 
 void FeatureChannel::getPatch(Rect& roi, FeatureChannel& patch_fc)
 {
         Rect expand_roi(roi.x, roi.y, roi.width+1, roi.height+1);
-        //浅拷贝
+        //脟鲁驴陆卤麓
         //patch_fc.gray_img_ = gray_img_(roi);
         //patch_fc.integral_gray_img_ = integral_gray_img_(expand_roi);
         //patch_fc.integral_mag_img_ =  integral_mag_img_(expand_roi);

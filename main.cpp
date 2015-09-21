@@ -3,7 +3,7 @@
 #include "Adaboost.h"
 #include "FDDB.h"
 
-void main(int argc,char *argv[])
+int main(int argc,char *argv[])
 {
 
         int type = atoi(argv[1]);
@@ -50,4 +50,6 @@ void main(int argc,char *argv[])
 
         cout << "Done!" << endl;
         getchar();
+	
+	return 1;
 }

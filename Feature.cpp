@@ -6,7 +6,7 @@ Feature::Feature(FEATURE_TYPE feat_type)
         feat_type_ = feat_type;
 }
 
-bool Feature::save(string& save_dir) 
+bool Feature::save(const string& save_dir) 
 {
         return false;
 }
@@ -42,8 +42,8 @@ void Feature::drawFeatureRect(Mat& img)
         return;
 }
 
-//覆盖基类虚函数时，派生类函数和基类中的要完全一致，
-//（返回值，函数名，参数个数，参数类型，参数次序都不能有差异）
+//赂虏赂脟禄霉脌脿脨茅潞炉脢媒脢卤拢卢脜脡脡煤脌脿潞炉脢媒潞脥禄霉脌脿脰脨碌脛脪陋脥锚脠芦脪禄脰脗拢卢
+//拢篓路碌禄脴脰碌拢卢潞炉脢媒脙没拢卢虏脦脢媒赂枚脢媒拢卢虏脦脢媒脌脿脨脥拢卢虏脦脢媒麓脦脨貌露录虏禄脛脺脫脨虏卯脪矛拢漏
 Feature* Feature::cloneNewObject(void)
 {
         return NULL;
@@ -109,7 +109,7 @@ void Feature::FreeFeaturePool(vector<Feature*>& pfeature_vec, int exclude_index)
 
 void Feature::genFeatureThreshold(vector<Sample>& sample_vec, vector<size_t>& sample_index_vec, vector<Feature>& feature_vec)
 {
-        //随机数生成器
+        //脣忙禄煤脢媒脡煤鲁脡脝梅
         RNG rng( getTickCount() );
         double min_thresh = 0.0;
         double max_thresh = 0.0;
@@ -138,7 +138,7 @@ void Feature::genFeatureThreshold(vector<Sample>& sample_vec, vector<size_t>& sa
 
 void Feature::genFeatureThreshold(vector<Sample>& sample_vec, vector<size_t>& sample_index, vector<Feature*>& pfeature_vec)
 {
-        //随机数生成器
+        //脣忙禄煤脢媒脡煤鲁脡脝梅
         RNG rng( getTickCount() );
         double min_thresh = 0.0;
         double max_thresh = 0.0;

@@ -131,7 +131,7 @@ int WeakClassifier::Predict(Sample& sample)
 }
 
 
-void WeakClassifier::Save(string& save_dir)
+void WeakClassifier::Save(const string& save_dir)
 {
         if(!FileExist(save_dir))
         {

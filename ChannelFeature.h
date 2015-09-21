@@ -15,7 +15,7 @@ public:
         double sumValue(const Sample& sample);
         int featureValue(const Sample& sample);
         void setThresh(double thresh);
-        bool save(string& save_dir);
+        bool save(const string& save_dir);
         bool load(string& load_dir);
         static void genChannelFeaturePool(Size& range, vector<Feature*>& feature_vec, int num=128);
 };

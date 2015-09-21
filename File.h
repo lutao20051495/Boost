@@ -25,4 +25,4 @@ void readImage(const string& img_path, const string& type, vector<Mat>& img_vec,
 
 void readFileNameMultiDir(string& file_path, string& type, vector<string>& img_name_vec, int max_dir_num);
 
-void CreateDir(string& dir_name);
+void CreateDir(const string& dir_name);

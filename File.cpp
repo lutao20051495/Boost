@@ -187,12 +187,12 @@ void readImage(const string& img_path, const string& type, vector<Mat>& img_vec,
 
 
 
-void CreateDir(string& dir_name)
+void CreateDir(const string& dir_name)
 {
 #ifdef WIN32
         CreateDirectory(dir_name.c_str(), NULL);
 #else
-        mkdir(dir_name, 777);
+        mkdir(dir_name.c_str(), 777);
 #endif
         return;
 }

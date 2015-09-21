@@ -26,5 +26,5 @@ public:
 
         int Predict(Sample& sample);
 
-        void Save(string& save_dir);
+        void Save(const string& save_dir);
 };         

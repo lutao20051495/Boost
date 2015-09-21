@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "Sample.h"       
 #include "Patch.h"
 #include "File.h"
@@ -146,7 +147,8 @@ void Sample::getPatch(Rect& roi, Sample& sample_patch)
 {
         FeatureChannel fc_patch;
         fc_.getPatch(roi, fc_patch);
-        sample_patch = Sample(roi.size(), fc_patch);
+	Size patch_size = roi.size();
+        sample_patch = Sample(patch_size, fc_patch);
         return;
 }
 

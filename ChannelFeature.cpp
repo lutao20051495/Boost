@@ -44,7 +44,7 @@ void ChannelFeature::setThresh(double thresh)
 }
 
 
-bool ChannelFeature::save(string& save_dir) 
+bool ChannelFeature::save(const string& save_dir) 
 {
         string save_path = save_dir + "\\" + "channel.txt";
         fstream save_file(save_path.c_str(), ios::out);
@@ -71,7 +71,7 @@ bool ChannelFeature::load(string& dir)
         {
                 return false;
         }
-        //×°ÔØÊý¾Ý
+        //Ã—Â°Ã”Ã˜ÃŠÃ½Â¾Ã
         string title;
 
         src_file  >> title;
@@ -100,7 +100,7 @@ void ChannelFeature::genChannelFeaturePool(Size& range, vector<Feature*>& featur
                 //feature channel index
                 int index = rng.uniform(0, FeatureChannel::feature_channel_num_);
 
-                //²úÉúÇøÓò(±Ü¿ª±ßÔµµã)
+                //Â²ÃºÃ‰ÃºÃ‡Ã¸Ã“Ã²(Â±ÃœÂ¿ÂªÂ±ÃŸÃ”ÂµÂµÃ£)
                 int min_w = range.width/8 ;
                 int min_h = range.height/8 ;
                 int w  = rng.uniform( min_w, range.width/4);
@@ -109,7 +109,7 @@ void ChannelFeature::genChannelFeaturePool(Size& range, vector<Feature*>& featur
                 int y  = rng.uniform( 1, range.height - h - 1 );
                 Rect zone(x,y, w,h);
 
-                //²úÉú·§Öµ
+                //Â²ÃºÃ‰ÃºÂ·Â§Ã–Âµ
                 double thresh = 0.0;
 
                 ChannelFeature* pcf = new ChannelFeature(index, zone, thresh);

@@ -15,7 +15,7 @@ public:
         static vector<Sample> train_sample_vec_;
 public:
         Sample(){};
-        Sample::Sample(Size& s, int label=0);
+        Sample(Size& s, int label=0);
         Sample(unsigned int patch_width, unsigned int patch_height, int label);
         Sample(Mat& img, int label=0);
         Sample(Size& size, FeatureChannel& fc, int label=0);

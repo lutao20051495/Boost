@@ -13,7 +13,7 @@ public:
         unsigned int weak_clf_num_;
 public:
         Adaboost(unsigned int weak_clf_num);
-        void Train(vector<size_t>& sample_index_vec, string& model_dir);
+        void Train(vector<size_t>& sample_index_vec, const string& model_dir);
 };
 
-void TrainAdaboost(string& pos_sample_dir, string& neg_img_dir, string& save_model_dir);
+void TrainAdaboost(const string& pos_sample_dir, const string& neg_img_dir, const string& save_model_dir);

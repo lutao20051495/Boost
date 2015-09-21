@@ -6,25 +6,25 @@ using namespace cv;
 #include <fstream>
 using namespace std;
 
-#include <windows.h>
+//#include <windows.h>
 #include "FDDB.h"
 #include "File.h"
 #include "shape.h"
 #include "Image.h"
 
 
-FDDB::FDDB(string& data_dir)
+FDDB::FDDB(const string& data_dir)
 {
         data_dir_ = data_dir;
         save_sample_size_ = Size(32,32);
 }
 
 
-void FDDB::genFacePatch(string& save_dir)
+void FDDB::genFacePatch(const string& save_dir)
 {
         if(!FileExist(save_dir))
         {
-                CreateDirectory(save_dir.c_str(), NULL);
+                CreateDir(save_dir.c_str());
         }
 
         string img_dir = data_dir_ + "\\" + "originalPics";
@@ -84,7 +84,7 @@ bool FDDB::genFacePatch(string& anno_file_path, string& img_dir, vector<Mat>& im
                         anno_file >> ellipse.center_.x;
                         anno_file >> ellipse.center_.y;
 
-                        //²»ÖªµÀÕâ¶ùÎªÊ²Ã´»áÓÐÒ»¸ö1
+                        //Â²Â»Ã–ÂªÂµÃ€Ã•Ã¢Â¶Ã¹ÃŽÂªÃŠÂ²ÃƒÂ´Â»Ã¡Ã“ÃÃ’Â»Â¸Ã¶1
                         string one;
                         anno_file >> one;
 
@@ -116,7 +116,8 @@ bool FDDB::genFacePatch(Mat& img, FDDB_Ellipse& ellipse, vector<Mat>& face_patch
 
         Rect inner_rect;
         Rect outer_rect;
-        genInnerOuterRect(ellipse, inner_rect, outer_rect, img.size());
+	Size img_size = img.size();
+        genInnerOuterRect(ellipse, inner_rect, outer_rect, img_size);
 
         genImagePatch(img, inner_rect, outer_rect, face_patch_vec);
 
@@ -191,7 +192,7 @@ void FDDB::genImagePatch(Mat& img, Rect& inner_rect, Rect& outer_rect, vector<Ma
         */
         while(1)
         {
-                //Æ½ÒÆµ±width<8||height<8Ê±£¬¾ÍÍ£Ö¹ÁË£¬¼ÙÉèwidth£¬height>=4
+                //Ã†Â½Ã’Ã†ÂµÂ±width<8||height<8ÃŠÂ±Â£Â¬Â¾ÃÃÂ£Ã–Â¹ÃÃ‹Â£Â¬Â¼Ã™Ã‰Ã¨widthÂ£Â¬height>=4
                 for(int x=outer_rect.x; (x+width)<=outer_rect.br().x; x+=cvRound(width*x_step))
                 {
                         for(int y=outer_rect.y; (y+height)<=outer_rect.br().y; y+=cvRound(height*y_step))
@@ -210,7 +211,7 @@ void FDDB::genImagePatch(Mat& img, Rect& inner_rect, Rect& outer_rect, vector<Ma
                                 }
                         }
                 }
-                //Èç¹û²»ÏòÉÏÈ¡ÕûÊý£¬width¾ÍÒ»Ö±Ôö¼Ó²»ÉÏÈ¥£¬ÕâÀï¼ÙÉè³õÊ¼width>=5
+                //ÃˆÃ§Â¹Ã»Â²Â»ÃÃ²Ã‰ÃÃˆÂ¡Ã•Ã»ÃŠÃ½Â£Â¬widthÂ¾ÃÃ’Â»Ã–Â±Ã”Ã¶Â¼Ã“Â²Â»Ã‰ÃÃˆÂ¥Â£Â¬Ã•Ã¢Ã€Ã¯Â¼Ã™Ã‰Ã¨Â³ÃµÃŠÂ¼width>=5
                 width = cvRound(width*scale_step);
                 height = cvRound(height*scale_step);
                 if( (width>outer_rect.width)||(height>outer_rect.height) )
@@ -221,20 +222,14 @@ void FDDB::genImagePatch(Mat& img, Rect& inner_rect, Rect& outer_rect, vector<Ma
 }
 
 
-void FDDB::loadFacePatch(string& face_patch_dir, int start_index, int end_index, vector<Mat>& img_patch_vec)
+void FDDB::loadFacePatch(const string& face_patch_dir_prefix, int start_index, int end_index, vector<Mat>& img_patch_vec)
 {
         for(int i=start_index; i<=end_index; i++)
         {
                 char sub_dir[50];
                 sprintf(sub_dir, "FDDB-fold-%d", i);
 
-                if(face_patch_dir.empty())
-                {
-                        //Ä¬ÈÏÄ¿Â¼
-                        face_patch_dir =  data_dir_ + "\\" + "face_patch";
-                }
-
-                string face_patch_path =  face_patch_dir + "\\" + sub_dir;
+                string face_patch_path =  data_dir_ + "/" + face_patch_dir_prefix + "/" + sub_dir;
 
                 vector<string> img_name_vec;
                 GetFileName(face_patch_path, string("jpg"), img_name_vec);
@@ -253,7 +248,7 @@ void FDDB::loadFacePatch(string& face_patch_dir, int start_index, int end_index,
 }
 
 
-void genFacePatchFDDB(string& data_dir, string& save_dir)
+void genFacePatchFDDB(const string& data_dir, const string& save_dir)
 {
         FDDB fddb(data_dir);
         fddb.genFacePatch(save_dir);

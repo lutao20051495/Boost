@@ -8,14 +8,14 @@ Adaboost::Adaboost(unsigned int weak_clf_num)
         weak_clf_num_ = weak_clf_num;
 }
 
-void Adaboost::Train(vector<size_t>& sample_index_vec, string& save_model_dir)
+void Adaboost::Train(vector<size_t>& sample_index_vec, const string& save_model_dir)
 {
         sclf_.Train(sample_index_vec, weak_clf_num_, save_model_dir);
         return;
 }
 
 
-void TrainAdaboost(string& pos_sample_dir, string& neg_img_dir, string& save_model_dir)
+void TrainAdaboost(const string& pos_sample_dir, const string& neg_img_dir, const string& save_model_dir)
 {
         //read pos sample
         vector<Sample> pos_sample_vec;

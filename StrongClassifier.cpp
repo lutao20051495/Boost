@@ -1,7 +1,8 @@
+#include <stdio.h>
 #include "StrongClassifier.h"
 #include "File.h"
 
-void StrongClassifier::Train(vector<size_t>& sample_index_vec, unsigned int weak_clf_num, string& save_model_dir)
+void StrongClassifier::Train(vector<size_t>& sample_index_vec, unsigned int weak_clf_num, const string& save_model_dir)
 {
         if(!FileExist(save_model_dir))
         {

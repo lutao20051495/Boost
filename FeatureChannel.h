@@ -11,22 +11,22 @@ class FeatureChannel
 {
 public:
         /*
-	//�Ҷ�ͼ
+	//»Ò¶ÈÍ¼
 	Mat    gray_img_;
 
-        //���ֻҶ�ͼ
+        //»ý·Ö»Ò¶ÈÍ¼
 	Mat    integral_gray_img_;
         Mat    integral_mag_img_;
 
-        //�ݶ�ͼ
+        //ÌÝ¶ÈÍ¼
         Mat     gradient_mag_img_;
         Mat     gradient_angle_img_;
 
-        //�ݶ��ݶ�ͼ
+        //ÌÝ¶ÈÌÝ¶ÈÍ¼
         Mat     gradient_mag_mag_img_;
         Mat     gradient_mag_angle_img_;
 
-        //ct ͼ
+        //ct Í¼
         Mat ct_img_;
         */
         vector<Mat> feature_channel_vec_;
@@ -37,7 +37,7 @@ public:
 
         void calIntegralImage(Mat& gray_img, Mat& integral_gray_img);
 
-        void FeatureChannel::calGradient(int dy, int dx, int &magnitude, int &angle);
+        void calGradient(int dy, int dx, int &magnitude, int &angle);
 
         void calGradientImage(Mat& gray_img, Mat& mag_img, Mat& angle_img);
 

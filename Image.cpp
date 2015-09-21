@@ -81,7 +81,7 @@ void resizeImages(vector<Mat>& img_vec, vector<Mat>& resized_img_vec, Size& dsiz
 void saveImages(vector<Mat>& img_vec, string& save_dir, int start_index)
 {
         if(!FileExist(save_dir))
-                CreateDirectory(save_dir.c_str(), NULL);
+                CreateDir(save_dir);
         char buf[200];
         for(size_t i=0; i<img_vec.size(); i++)
         {
@@ -95,7 +95,7 @@ void saveImages(vector<Mat>& img_vec, string& save_dir, int start_index)
 void saveImages(vector<Mat>& img_vec, string& sv_dir, vector<size_t>& sv_index_vec)
 {
         if(!FileExist(sv_dir))
-                CreateDirectory(sv_dir.c_str(), NULL);
+                CreateDir(sv_dir);
 
         char buf[50];
         for(size_t i=0; i<sv_index_vec.size(); i++)
