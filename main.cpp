@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "Adaboost.h"
+#include "StrongClassifier.h"
 #include "FDDB.h"
 
 int main(int argc,char *argv[])
