@@ -210,12 +210,19 @@ void GenRandPatch(const string& src_img_dir, const string& type, const string& d
 		return;
 	}
 
-	mkdir(dst_patch_dir.c_str(),0777);
+	//mkdir(dst_patch_dir.c_str(),0777);
+        if(!FileExist(dst_patch_dir))
+        {
+                CreateDir(dst_patch_dir);
+        }
 	int sub_index = 0;
 
 	string save_dir = dst_patch_dir + "/patch_0";
-	mkdir(save_dir.c_str(), 0777);
 
+        if(!FileExist(save_dir))
+        {
+                CreateDir(save_dir);
+        }
 	
 	int patch_per_img = cvRound((double)patch_num/img_name_vec.size());
 	int sum_patch_num = 0;
@@ -243,8 +250,10 @@ void GenRandPatch(const string& src_img_dir, const string& type, const string& d
 			char sub_dir_name[100];
 			sprintf(sub_dir_name, "patch_%d", sub_index);
 			save_dir = dst_patch_dir + "/" + sub_dir_name;
-			mkdir(save_dir.c_str(), 0777);
-			
+			if(!FileExist(save_dir))
+                        {
+                                CreateDir(save_dir);
+                        }
 			sum_patch_num = 0;
 		}
 	}
@@ -338,7 +347,10 @@ void ConvertColorToGray(const string& src_img_dir, const string& dst_img_dir, co
 		return;
 	}
 	
-	mkdir(dst_img_dir.c_str(),0777);
+        if (!FileExist(dst_img_dir))
+        {
+                CreateDir(dst_img_dir);
+        }
 	for (unsigned int i=0; i<img_name_vec.size(); i++)
 	{
 		cout << "i: " << i << "\t" << img_name_vec[i] << endl;
