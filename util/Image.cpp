@@ -86,9 +86,9 @@ void saveImages(vector<Mat>& img_vec, string& save_dir, int start_index)
         if(!FileExist(save_dir))
                 CreateDir(save_dir);
         char buf[200];
-        for(size_t i=0; i<img_vec.size(); i++)
+        for(unsigned i=0; i<img_vec.size(); i++)
         {
-                sprintf(buf, "%s/%d.jpg", save_dir.c_str(), start_index+i);
+                sprintf(buf, "%s/%u.jpg", save_dir.c_str(), start_index+i);
                 imwrite(buf, img_vec[i]);
         }
         return;
@@ -101,9 +101,9 @@ void saveImages(vector<Mat>& img_vec, string& sv_dir, vector<size_t>& sv_index_v
                 CreateDir(sv_dir);
 
         char buf[50];
-        for(size_t i=0; i<sv_index_vec.size(); i++)
+        for(unsigned i=0; i<sv_index_vec.size(); i++)
         {
-                sprintf(buf, "%s/%d.jpg", sv_dir.c_str(), i);
+                sprintf(buf, "%s/%u.jpg", sv_dir.c_str(), i);
                 imwrite(buf, img_vec[ sv_index_vec[i] ]);
         }
 

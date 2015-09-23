@@ -3,7 +3,7 @@
 using namespace std;
 
 #include "ChannelFeature.h"
-#include "Image.h"
+#include "util/Image.h"
 
 
 ChannelFeature::ChannelFeature(void):Feature(ACANGLE)

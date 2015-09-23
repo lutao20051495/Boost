@@ -5,8 +5,8 @@ using namespace std;
 #include <stdio.h>
 
 #include "ModelEvaluation.h"
-#include "File.h"
-#include "Image.h"
+#include "util/File.h"
+#include "util/Image.h"
 
 ModelEvaluation::ModelEvaluation(Classifier& clf,
 				unsigned int max_test_num, float thresh)

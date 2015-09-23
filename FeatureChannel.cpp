@@ -27,10 +27,10 @@ FeatureChannel::FeatureChannel(Mat& gray_img)
 
         vector<Mat> angle_img_vec;
         splitAngleImage(angle_img, mag_img, angle_img_vec);
-        for(size_t i=0; i<angle_img_vec.size(); i++)
+        for(unsigned int i=0; i<angle_img_vec.size(); i++)
         {
                 char name[100];
-                sprintf(name, "anlge image %d", i);
+                sprintf(name, "anlge image %u", i);
                 //imshow(string(name), angle_img_vec[i]);
                 calIntegralImage(angle_img_vec[i], feature_channel_vec_[2+i]);
         }

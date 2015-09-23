@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "StrongClassifier.h"
-#include "File.h"
-#include "FDDB.h"
+#include "util/File.h"
+#include "FDDB/FDDB.h"
 
 
 StrongClassifier::StrongClassifier(int weak_clf_num)

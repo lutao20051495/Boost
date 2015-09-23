@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "Sample.h"       
-#include "Patch.h"
-#include "File.h"
+#include "util/Patch.h"
+#include "util/File.h"
 
 vector<Sample> Sample::train_sample_vec_ = vector<Sample>(0);
 

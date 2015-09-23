@@ -3,7 +3,7 @@
 using namespace std;
 
 #include "WeakClassifier.h"
-#include "File.h"
+#include "util/File.h"
 
 float WeakClassifier::max_err_rate_ = 0.45;
 

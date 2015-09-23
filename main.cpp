@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "StrongClassifier.h"
-#include "FDDB.h"
+#include "FDDB/FDDB.h"
 
 int main(int argc,char *argv[])
 {
