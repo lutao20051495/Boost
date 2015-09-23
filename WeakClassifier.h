@@ -7,7 +7,10 @@ public:
     int polar_;
     float err_rate_;
 public:
-        void Train(vector<size_t>& sample_index_vec, vector<float>& weight_vec);
+    static float max_err_rate_;
+public:
+	WeakClassifier();
+        bool Train(vector<size_t>& sample_index_vec, vector<float>& weight_vec);
         size_t SelectOptimalFeature(vector<Feature*>& pfeature_vec,
                                                 vector<size_t>& sample_index_vec,
                                                 vector<float>& weight_vec,
@@ -29,4 +32,6 @@ public:
         void Save(const string& save_dir);
 
         void FreeFeature();
+	
+	bool AccurayEnough();
 };         

@@ -5,7 +5,16 @@ using namespace std;
 #include "WeakClassifier.h"
 #include "File.h"
 
-void WeakClassifier::Train(vector<size_t>& sample_index_vec, vector<float>& weight_vec)
+float WeakClassifier::max_err_rate_ = 0.45;
+
+WeakClassifier::WeakClassifier()
+{
+	pfeature_ = NULL;
+	polar_ = 0;
+	err_rate_ = -1.0;
+}
+
+bool WeakClassifier::Train(vector<size_t>& sample_index_vec, vector<float>& weight_vec)
 {
         vector<Sample>& train_sample_vec = Sample::train_sample_vec_;
 
@@ -20,15 +29,40 @@ void WeakClassifier::Train(vector<size_t>& sample_index_vec, vector<float>& weig
         //select optimal feature
         float err_rate = -1.0;
         int optimal_index = SelectOptimalFeature(pfeature_vec, sample_index_vec, weight_vec, polar_, err_rate_);
-        pfeature_ = NULL;
-        if(optimal_index>=0)
+	
+        if (optimal_index>=0)
         {
-                pfeature_ = pfeature_vec[optimal_index];
+		if (AccurayEnough())
+		{
+			pfeature_ = pfeature_vec[optimal_index];
+		}
+		else
+		{
+			delete pfeature_vec[optimal_index];
+			pfeature_vec[optimal_index] = NULL;
+		}
         }
 
         //free feature
         Feature::FreeFeaturePool(pfeature_vec, optimal_index);
-        return;
+	
+	if (pfeature_vec[optimal_index])
+		return true;
+	else
+		return false;
+}
+
+
+bool WeakClassifier::AccurayEnough()
+{
+	if(err_rate_ > WeakClassifier::max_err_rate_)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 

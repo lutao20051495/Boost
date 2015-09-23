@@ -99,7 +99,7 @@ void Feature::FreeFeaturePool(vector<Feature*>& pfeature_vec, int exclude_index)
 {
         for(unsigned int i=0; i<pfeature_vec.size(); i++)
         {
-                if (i!=exclude_index)
+                if ((i!=exclude_index)&&pfeature_vec[i])
                 {
                         delete pfeature_vec[i];
                 }
