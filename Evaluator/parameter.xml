@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<ModelType>"Caffe"</ModelType>
+<CaffeModelParameter>
+  <proto_file_path>"/home/szh/workspace/object_detection/models/finetune_flickr_style/deploy.prototxt"</proto_file_path>
+  <model_file_path>"/home/szh/workspace/object_detection/models/finetune_flickr_style/finetune_flickr_style_iter_10000.caffemodel"</model_file_path>
+  <mean_file_path>"/home/szh/workspace/object_detection/data/bus_lmdb/imagenet_mean.binaryproto"</mean_file_path>
+  <label_file_path>"/home/szh/workspace/object_detection/data/bus_lmdb/label.txt"</label_file_path>
+  <sample_width>227</sample_width>
+  <sample_height>227</sample_height>
+  <image_type>"COLOR"</image_type>
+</CaffeModelParameter>
+
+<EvaluationParameter>
+  <sample_width_normalized>256</sample_width_normalized>
+  <sample_height_normalized>256</sample_height_normalized>
+  <crop_width>227</crop_width>
+  <crop_height>227</crop_height>
+</EvaluationParameter>
+</opencv_storage>
