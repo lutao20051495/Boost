@@ -6,7 +6,6 @@ using namespace cv;
 #include <fstream>
 using namespace std;
 
-//#include <windows.h>
 #include "../FDDB/FDDB.h"
 #include "../util/File.h"
 #include "../util/shape.h"

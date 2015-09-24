@@ -195,6 +195,19 @@ void WeakClassifier::Save(const string& save_dir)
         return;
 }
 
+
+bool WeakClassifier::Trained()
+{
+        if(pfeature_)
+        {
+                return true;
+        }
+        else
+        {
+                return false;
+        }
+}
+
 void WeakClassifier::FreeFeature()
 {
         if(pfeature_)

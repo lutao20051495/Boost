@@ -34,4 +34,6 @@ public:
         void FreeFeature();
 	
 	bool AccurayEnough();
+
+        bool Trained();
 };         

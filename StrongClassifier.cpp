@@ -7,7 +7,8 @@
 StrongClassifier::StrongClassifier(int weak_clf_num)
 {
 	weak_clf_vec_.resize(weak_clf_num);
-	thresh_ = 0.5;
+        weak_clf_weight_vec_.resize(weak_clf_num, 0.0);
+	thresh_ = 0.0;
 }
 
 void StrongClassifier::Train(vector<size_t>& sample_index_vec, const string& save_model_dir)
@@ -35,27 +36,27 @@ void StrongClassifier::Train(vector<size_t>& sample_index_vec, const string& sav
 		}
                 
                 cout << "train the " << cur_sclf_size << "th weak clf" << endl;
-                cout << "training weak clf err_rate: " << weak_clf.err_rate_ << endl << endl;
+                cout << "training weak clf err_rate: " << weak_clf.err_rate_ << endl;
 
 		//save clf
 		weak_clf_vec_[cur_sclf_size] = weak_clf;
 		char sv_dir[128];
-		sprintf(sv_dir, "%s/weak_clf_%d", save_model_dir.c_str(), cur_sclf_size++);
+		sprintf(sv_dir, "%s/weak_clf_%d", save_model_dir.c_str(), cur_sclf_size);
 		weak_clf.Save(string(sv_dir));
 
 
                 //classifier weight
-                float clf_weight = 0.0f;
                 if (weak_clf.err_rate_>0)
                 {
-                        clf_weight = 0.5f*log((1-weak_clf.err_rate_)/weak_clf.err_rate_);
-                        weak_clf_weight_vec_.push_back(clf_weight);
+                        weak_clf_weight_vec_[cur_sclf_size] = 0.5f*log((1-weak_clf.err_rate_)/weak_clf.err_rate_);
                 }
                 else
                 {
+                        weak_clf_weight_vec_[cur_sclf_size] = 0.5*log(10000.0f);
                         break;
                 }
 
+                float clf_weight = weak_clf_weight_vec_[cur_sclf_size];
                 //update sample weight
                 for(unsigned int i=0; i<sample_index_vec.size(); i++)
                 {
@@ -76,8 +77,12 @@ void StrongClassifier::Train(vector<size_t>& sample_index_vec, const string& sav
                         sample_weight_vec[i] /= sum_weight;
                 }
 		
-		//test accuracy
-		cout << "training accuracy: " << TrainingError(train_sample_vec) << endl;
+		//test accuracy&loss
+		cout << "training error: " << TrainingError(train_sample_vec) << endl;
+                cout << "training loss: " << TrainingLoss(train_sample_vec) << endl << endl;
+                
+                train_weak_clf_num++;
+                cur_sclf_size++;
         }
 }
 
@@ -91,6 +96,7 @@ float StrongClassifier::TrainingError(vector<Sample>& sample_vec)
 	unsigned int err_num = 0;
 	for (unsigned int i=0; i<sample_vec.size(); i++)
 	{
+                //cout << "test sample i: " << i << endl;
 		if (Predict(sample_vec[i])!=sample_vec[i].label_)
 		{
 			err_num++;
@@ -114,7 +120,7 @@ int StrongClassifier::Predict(Sample& sample, int label_num)
 		}
 		else
 		{
-			return 0;
+			return -1;
 		}
 	}
 	else
@@ -122,6 +128,20 @@ int StrongClassifier::Predict(Sample& sample, int label_num)
 		cout << "label_num does not equals 2" << endl;
 		return -1;
 	}
+}
+
+
+void StrongClassifier::Predict(Sample& sample, float& score)
+{
+        score = 0.0;
+        for (unsigned int i=0; i<weak_clf_vec_.size(); i++)
+        {
+                if (weak_clf_vec_[i].Trained())
+                {
+                        score += weak_clf_weight_vec_[i]*weak_clf_vec_[i].Predict(sample);
+                }
+        }
+        return;
 }
 
 
@@ -143,6 +163,12 @@ float StrongClassifier::TrainingLoss(vector<Sample>& sample_vec)
 }
 
 
+int StrongClassifier::WeakClfNum()
+{
+        return weak_clf_vec_.size();
+}
+
+
 void TrainAdaboost(const string& pos_sample_dir, const string& neg_img_dir, const string& save_model_dir)
 {
         //read pos sample
@@ -161,7 +187,7 @@ void TrainAdaboost(const string& pos_sample_dir, const string& neg_img_dir, cons
         vector<Mat> neg_img_vec;
         readImage(neg_img_dir, string("jpg"), neg_img_vec, 100);
         vector<Sample> neg_sample_vec;
-        Sample::genRandomNegSample(neg_img_vec, neg_sample_vec, sample_size, 0, pos_sample_vec.size());
+        Sample::genRandomNegSample(neg_img_vec, neg_sample_vec, sample_size, -1, pos_sample_vec.size());
         cout << "train negative sample num: " << neg_sample_vec.size() << endl;
 
         vector<Sample>& train_data_vec = Sample::train_sample_vec_;
@@ -176,6 +202,7 @@ void TrainAdaboost(const string& pos_sample_dir, const string& neg_img_dir, cons
                 sample_index_vec.push_back(i);
         }
 
-        StrongClassifier sclf(10);
+        StrongClassifier sclf(50);
         sclf.Train(sample_index_vec, save_model_dir);
+        cout << "strong classifier size: " << sclf.WeakClfNum() << endl;
 }

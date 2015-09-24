@@ -14,6 +14,8 @@ public:
 	float TrainingError(vector<Sample>& sample_vec);
 	float TrainingLoss(vector<Sample>& sample_vec);
 	int   Predict(Sample& sample, int label_num=2);
+        void Predict(Sample& sample, float& score);
+        int WeakClfNum();
 };
 
 void TrainAdaboost(const string& pos_sample_dir, const string& neg_img_dir, const string& save_model_dir);
