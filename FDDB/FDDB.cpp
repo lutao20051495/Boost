@@ -7,10 +7,10 @@ using namespace cv;
 using namespace std;
 
 //#include <windows.h>
-#include "FDDB/FDDB.h"
-#include "util/File.h"
-#include "util/shape.h"
-#include "util/Image.h"
+#include "../FDDB/FDDB.h"
+#include "../util/File.h"
+#include "../util/shape.h"
+#include "../util/Image.h"
 
 
 FDDB::FDDB(const string& data_dir)
