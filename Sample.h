@@ -28,7 +28,8 @@ public:
 
         static void load(string& sample_dir, string& type, int label, vector<Sample>& sample_vec,
                                                                             int max_sample_num=1000000);
-
+        static void LoadFDDBSample(const string& dir, const string& sub_dir, int start_sub_index,
+                int end_sub_index, Size& sample_size, vector<Sample>& sample_vec);
         static void genSample(vector<Mat>& img_vec, int label, vector<Sample>& sample_vec);
 
         static void genRandomNegSample(const vector<Mat>& img_vec, vector<Sample>& sample_vec, 
@@ -42,7 +43,8 @@ public:
 
         static void genRandomNegSample(string& img_path, vector<Sample>& sample_vec, Size& sample_size,
                                                 int label, unsigned max_sample_num);
-
+        static void GenRandPatchSample(const string& img_dir, const string& type, int label, Size& size,
+                                                int num, vector<Sample>& sample_vec);
         static double calcPurity(vector<Sample>& sample_vec, vector<size_t>& index_vec);
 
         static double calcEntropy(vector<Sample>& sample_vec, vector<size_t>& index_vec);

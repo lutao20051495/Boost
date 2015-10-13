@@ -5,7 +5,7 @@ using namespace std;
 #include "WeakClassifier.h"
 #include "util/File.h"
 
-float WeakClassifier::max_err_rate_ = 0.45;
+float WeakClassifier::max_err_rate_ = 0.48f;
 
 WeakClassifier::WeakClassifier()
 {
@@ -216,4 +216,52 @@ void WeakClassifier::FreeFeature()
         }
 
         return;
+}
+
+bool WeakClassifier::Load(const string& model_dir)
+{
+        if(!FileExist(model_dir))
+        {
+                cout << "load weak clf error: " << model_dir << endl;
+                return false;
+        }
+
+        string para_file_path = model_dir + "/" + "weak_clf.txt";
+        fstream para_file(para_file_path.c_str(), ios::in);
+        if (!para_file.is_open())
+        {
+                cout << "load weak clf para error: " << para_file_path << endl;
+                return false;
+        }
+        string txt;
+        //polar
+        para_file >> txt;
+        para_file >> polar_;
+
+        //err_rate
+        para_file >> txt;
+        para_file >> err_rate_;
+
+        //feature type
+        int feature_type = -1;
+        para_file >> txt;
+        para_file >> feature_type;
+
+        if (!LoadFeature(feature_type, model_dir))
+        {
+                return false;
+        }
+        para_file.close();
+        return true;
+}
+
+bool WeakClassifier::LoadFeature(int feature_type, const string& feature_dir)
+{
+        pfeature_ = Feature::CreateFeature(feature_type);
+        if(!pfeature_)
+        {
+                return false;
+        }
+        
+        return pfeature_->Load(feature_dir);
 }

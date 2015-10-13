@@ -1,11 +1,20 @@
 #include <stdio.h>
 
 #include "StrongClassifier.h"
-#include "FDDB/FDDB.h"
-
+#include "evaluator/Evaluator.h"
 int main(int argc,char *argv[])
 {
+        Evaluator evl;
+        if(!evl.LoadParameter(string(argv[argc-1])))
+        {
+                cout << "load parameter error!" << endl;
+        }
+        else
+        {
+                evl.Run(argc-1, argv+1);
+        }
 
+        /*
         int type = atoi(argv[1]);
         switch(type)
         {
@@ -47,7 +56,7 @@ int main(int argc,char *argv[])
                         cout << "error!" << endl;
                 }
         }
-
+        */
         cout << "Done!" << endl;
         getchar();
 	

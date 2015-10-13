@@ -36,4 +36,8 @@ public:
 	bool AccurayEnough();
 
         bool Trained();
-};         
+
+        bool Load(const string& model_dir);
+
+        bool LoadFeature(int feature_type, const string& feature_dir);
+};

@@ -1,0 +1,1 @@
+Boost.exe TestFpr Adaboost ./adaboost E:\workspace\database\negative\test "" jpg ./parameter.xml 

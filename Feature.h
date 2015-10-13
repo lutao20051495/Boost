@@ -23,7 +23,7 @@ public:
 
         virtual bool save(const string& save_dir);
 
-        virtual bool load(string& src_dir);
+        virtual bool Load(const string& src_dir);
 
         virtual void free(void);
 
@@ -36,6 +36,7 @@ public:
         static void FreeFeaturePool(vector<Feature*>& pfeature_vec, int exclude_index);
         static void genFeatureThreshold(vector<Sample>& sample_vec, vector<size_t>& sample_index_vec, vector<Feature>& feature_vec);
         static void genFeatureThreshold(vector<Sample>& sample_vec, vector<size_t>& sample_index, vector<Feature*>& pfeature_vec);
+        static Feature* CreateFeature(int feature_type);
         ~Feature(){};
 };
 

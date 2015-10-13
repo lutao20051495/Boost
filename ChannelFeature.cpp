@@ -6,7 +6,7 @@ using namespace std;
 #include "util/Image.h"
 
 
-ChannelFeature::ChannelFeature(void):Feature(ACANGLE)
+ChannelFeature::ChannelFeature(void):Feature(CHANNEL)
 {
 }
 
@@ -63,7 +63,7 @@ bool ChannelFeature::save(const string& save_dir)
 }
 
 
-bool ChannelFeature::load(string& dir)
+bool ChannelFeature::Load(const string& dir)
 {
         string path = dir + "\\" + "channel.txt";
         fstream src_file(path.c_str(), ios::in);

@@ -26,7 +26,7 @@ void Feature::setThresh(double thresh)
         return;
 }
 
-bool Feature::load(string& src_dir)
+bool Feature::Load(const string& src_dir)
 {
         return false;
 }
@@ -167,6 +167,24 @@ void Feature::genFeatureThreshold(vector<Sample>& sample_vec, vector<size_t>& sa
                 //cout << "thresh: " << thresh << endl;
                 pfeature_vec[i]->setThresh(thresh);
         }
+}
+
+
+Feature* Feature::CreateFeature(int feature_type)
+{
+        Feature* pfeature = NULL;
+        switch(feature_type)
+        {
+        case ACANGLE:
+                break;
+        case CHANNEL:
+                pfeature = new ChannelFeature();
+                break;
+        default:
+                cout << "CreateFeature wrong option: " << feature_type << endl;
+        }
+
+        return pfeature;
 }
 
 

@@ -1,14 +1,47 @@
 #include <stdio.h>
+#include <fstream>
+using namespace std;
+
 #include "StrongClassifier.h"
 #include "util/File.h"
 #include "FDDB/FDDB.h"
 
+unsigned int StrongClassifier::max_weak_clf_num_ = 1000;
+
+StrongClassifier::StrongClassifier()
+{
+        weak_clf_vec_.resize(0);
+        weak_clf_weight_vec_.resize(0);
+        thresh_ = 0.0;
+}
 
 StrongClassifier::StrongClassifier(int weak_clf_num)
 {
-	weak_clf_vec_.resize(weak_clf_num);
+        weak_clf_vec_.resize(weak_clf_num);
         weak_clf_weight_vec_.resize(weak_clf_num, 0.0);
-	thresh_ = 0.0;
+        thresh_ = 0.0;
+}
+
+
+bool StrongClassifier::LoadModelParameter(const string& para_file_path)
+{
+        cv::FileStorage para_file(para_file_path, FileStorage::READ);
+        if( !(para_file.isOpened()) )
+        {
+                cout << para_file_path << " can not be open!" << endl;
+                return false;
+        }
+        
+        FileNode model_para = para_file["Adaboost"];
+        int sample_width = model_para["sample_width"];
+        int sample_height = model_para["sample_height"];
+        input_sample_size_ = Size(sample_width, sample_height);
+        int weak_clf_num = model_para["weak_clf_num"];
+        weak_clf_vec_.resize(weak_clf_num);
+        weak_clf_weight_vec_.resize(weak_clf_num, 0.0);
+
+        
+        return true;
 }
 
 void StrongClassifier::Train(vector<size_t>& sample_index_vec, const string& save_model_dir)
@@ -130,6 +163,23 @@ int StrongClassifier::Predict(Sample& sample, int label_num)
 	}
 }
 
+void StrongClassifier::Predict(Mat& img, float& score)
+{
+        Mat resized_img;
+        if(img.cols!=input_sample_size_.width
+                ||img.rows!=input_sample_size_.height)
+        {
+                resize(img, resized_img, input_sample_size_);
+        }
+        else
+        {
+                resized_img = img;
+        }
+        Sample sample(resized_img);
+        Predict(sample, score);
+
+        return;
+}
 
 void StrongClassifier::Predict(Sample& sample, float& score)
 {
@@ -169,40 +219,68 @@ int StrongClassifier::WeakClfNum()
 }
 
 
-void TrainAdaboost(const string& pos_sample_dir, const string& neg_img_dir, const string& save_model_dir)
+void StrongClassifier::Save(const string& model_dir)
 {
-        //read pos sample
-        vector<Sample> pos_sample_vec;
-        FDDB fddb(pos_sample_dir);
-        vector<Mat> pos_img_vec;
-        fddb.loadFacePatch(string("face_patch"), 1, 1, pos_img_vec);
-        //test
-        pos_img_vec.resize(100);
-        Sample::genSample(pos_img_vec, 1, pos_sample_vec);
-        cout << "train positive sample num: " << pos_sample_vec.size() << endl;
-
-
-        Size sample_size = pos_sample_vec[0].getSize();
-        //gene neg image
-        vector<Mat> neg_img_vec;
-        readImage(neg_img_dir, string("jpg"), neg_img_vec, 100);
-        vector<Sample> neg_sample_vec;
-        Sample::genRandomNegSample(neg_img_vec, neg_sample_vec, sample_size, -1, pos_sample_vec.size());
-        cout << "train negative sample num: " << neg_sample_vec.size() << endl;
-
-        vector<Sample>& train_data_vec = Sample::train_sample_vec_;
-        train_data_vec = pos_sample_vec;
-        train_data_vec.insert(train_data_vec.end(), neg_sample_vec.begin(), neg_sample_vec.end());
-        cout << "all training sample num: " << train_data_vec.size() << endl;
-
-        //gene sample index
-        vector<size_t> sample_index_vec(0);
-        for (size_t i=0; i<train_data_vec.size(); i++)
+        string save_file_name = model_dir+"/"+"strong_classifier.txt";
+        fstream save_file(save_file_name.c_str(),ios::out);
+        assert(save_file);
+        save_file << "sample_size: " << input_sample_size_.width 
+                << "\t" << input_sample_size_.height << endl;
+        save_file << "weak_clf_num: " << WeakClfNum() << endl;
+        save_file << "weak_clf_weight:" << endl;
+        for (size_t i=0; i<weak_clf_vec_.size(); i++)
         {
-                sample_index_vec.push_back(i);
+                save_file << weak_clf_weight_vec_[i] << endl;
+        }
+        save_file.close();
+}
+
+
+bool StrongClassifier::Load(const string& model_dir)
+{
+        if(!FileExist(model_dir))
+        {
+                cout << "load strong clf error: " << model_dir << endl;
+                return false;
         }
 
-        StrongClassifier sclf(50);
-        sclf.Train(sample_index_vec, save_model_dir);
-        cout << "strong classifier size: " << sclf.WeakClfNum() << endl;
+        string sclf_file_name = model_dir + "/" + "strong_classifier.txt";
+        fstream sclf_file(sclf_file_name.c_str(), ios::in);
+        if(!sclf_file)
+        {
+                cout << "strong classifier error: " << sclf_file_name << endl;
+                return false;
+        }
+        string txt;
+        //sample size
+        sclf_file >> txt;
+        sclf_file >> input_sample_size_.width;
+        sclf_file >> input_sample_size_.height;
+        //weak clf num
+        sclf_file >> txt;
+        int weak_clf_num = 0;
+        sclf_file >> weak_clf_num;
+        weak_clf_vec_.resize(weak_clf_num);
+        weak_clf_weight_vec_.resize(weak_clf_num);
+        //weak clf weight
+        sclf_file >> txt;
+        string prefix = "weak_clf";
+        for (int i=0; i<weak_clf_num; i++)
+        {
+                char sub_dir[64];
+                sprintf(sub_dir, "%s_%d", prefix.c_str(), i);
+                string weak_clf_dir = model_dir + "/" + string(sub_dir);
+                if(!weak_clf_vec_[i].Load(weak_clf_dir))
+                {
+                        break;
+                }
+                else
+                {
+                        cout << "load " << weak_clf_dir << endl;
+                }
+                sclf_file >> weak_clf_weight_vec_[i];
+        }
+        sclf_file.close();
+
+        return true;
 }

@@ -1,8 +1,9 @@
 #include <stdio.h>
-#include "Sample.h"       
+#include "Sample.h"
 #include "util/Patch.h"
 #include "util/File.h"
-
+#include "util/Image.h"
+#include "FDDB/FDDB.h"
 vector<Sample> Sample::train_sample_vec_ = vector<Sample>(0);
 
 Sample::Sample(Size& s, int label)
@@ -75,6 +76,28 @@ void Sample::load(string& sample_dir, string& type, int label, vector<Sample>& s
         readImage(sample_dir, type, img_vec, max_sample_num);
 
         Sample::genSample(img_vec, label, sample_vec);
+        return;
+}
+
+
+void Sample::LoadFDDBSample(const string& dir, const string& sub_dir, int start_sub_index,
+                int end_sub_index, Size& sample_size,  vector<Sample>& sample_vec)
+{
+        FDDB fddb(dir);
+        vector<Mat> img_vec;
+        fddb.loadFacePatch(sub_dir, start_sub_index, end_sub_index, img_vec);
+        vector<Mat> resized_img_vec;
+        resizeImages(img_vec, resized_img_vec, sample_size);
+        Sample::genSample(resized_img_vec, 1, sample_vec);
+        return;
+}
+
+
+void Sample::GenRandPatchSample(const string& img_dir, const string& type, int label, Size& size, int num, vector<Sample>& sample_vec)
+{
+        vector<Mat> img_vec;
+        readImage(img_dir, type, img_vec, 100);
+        Sample::genRandomNegSample(img_vec, sample_vec, size, -1, num);
         return;
 }
 
