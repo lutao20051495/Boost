@@ -32,5 +32,10 @@ public:
 	float FalsePositiveRate(const string& neg_img_dir, const string& img_type, unsigned int& sum, unsigned int& err);
         float FalsePositiveRateMultiDir(const string& neg_img_dir, const string& sub_dir, const string& img_type, 
                 unsigned int& sum, unsigned int& err);
+	
+	void DetectOnImageMultiScale(const string& src_dir, const string& type, const string& save_dir, bool show);
+	void DetectOnImageMultiScale(const Mat& img, vector<Rect>& rect_vec);
+	template <typename Dtype>
+	void DetectOnImageSingleScale(const Dtype& input, vector<Rect>& rect_vec);
 };
 

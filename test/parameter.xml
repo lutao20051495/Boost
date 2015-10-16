@@ -1,15 +1,25 @@
 <?xml version="1.0"?>
 <opencv_storage>
 <Adaboost>
-<weak_clf_num>200</weak_clf_num>
-<sample_width>32</sample_width>
-<sample_height>32</sample_height>
+	<weak_clf_num>200</weak_clf_num>
+	<sample_width>32</sample_width>
+	<sample_height>32</sample_height>
 </Adaboost>
+
 <Evaluator>
-<thresh>1.5</thresh>
-<max_test_num>1000000</max_test_num>
-<load_all_neg_image>1</load_all_neg_image>
-<patch_per_image>10</patch_per_image>
-<display>10000</display>
+	<thresh>1.5</thresh>
+	<max_test_num>1000000</max_test_num>
+	<load_all_neg_image>1</load_all_neg_image>
+	<patch_per_image>10</patch_per_image>
+	<display>10000</display>
+	
+	<max_object_width>160</max_object_width>
+	<max_object_height>160</max_object_height>
+	<min_object_width>96</min_object_width>
+ 	<min_object_height>96</min_object_height>
+	<scale_step>1.125</scale_step>
+	<width_step>0.125</width_step>
+	<height_step>0.125</height_step>
+	
 </Evaluator>
 </opencv_storage>

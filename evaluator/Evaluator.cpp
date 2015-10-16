@@ -345,4 +345,79 @@ void Evaluator::TestFpr(int argc, char* argv[])
 }
 
 
+void Evaluator::DetectOnImageMultiScale(const string& src_dir, const string& type, const string& save_dir, bool show)
+{
+	vector<string> file_name_vec;
+	if (!GetFileName(src_dir, type, file_name_vec)
+		|| file_name_vec.size()<=0)
+	{
+		return;
+	}
+	for (size_t i=0; i<file_name_vec.size(); i++)
+	{
+		string img_name = src_dir + "/" + file_name_vec[i];
+		Mat img = imread(file_name_vec);
+		vector<Rect> rect_vec;
+		DetectOnImageMultiScale(img, rect_vec);
+		for (size_t j=0; j<rect_vec.size(); j++)
+		{
+			cv::rectangle(img, rect_vec[j], Scalar(255,0,0),2);
+		}
+		if (show)
+		{
+			imshow("detection", img);
+		}
+	}
+}
+
+
+void Evaluator::DetectOnImageMultiScale(const Mat& img, vector<Rect>& rect_vec)
+{
+	float max_scale_x = (float)pclf_->crop_size_.width/min_object_size_.width;
+	float min_scale_x = (float)pclf_->crop_size_.width/max_object_size_.width;
+	float max_scale_y = (float)pclf_->crop_size_.height/min_object_size_.height;
+	float min_scale_y = (float)pclf_->crop_size_.height/max_object_size_.height;
+	
+	float scale_x = min_scale_x;
+	float scale_y = min_scale_y;
+	Mat cvt_img;
+	Image::CvtImage(img, cvt_img, pclf_->input_img_type_);
+	while ((scale_x<=max_scale_x)&&(scale_y<=max_scale_y))
+	{
+		Mat resized_img;
+		cv::resize(cvt_img, resized_img, Size(0,0), scale_x, scale_y);
+		vector<Rect> scale_rect_vec;
+		if (pclf_->InputRaw())
+		{
+		    DetectOnImageSingleScale(resized_img, scale_rect_vec);
+		}
+		else
+		{
+		    Sample sample(resized_img);
+		    DetectOnImageSingleScale(sample, scale_rect_vec);
+		}
+		ResizeRect(scale_rect_vec, scale_rect_vec, 1.0f/scale_x, 1,0f/scale_y);
+		rect_vec.insert(rect_vec.end(), scale_rect_vec.begin(), scale_rect_vec.end());
+	}
+}
+
+template <typename Dtype>
+void Evaluator::DetectOnImageSingleScale(const Dtype& input, vector<Rect>& rect_vec)
+{
+	Size& slide_size = pclf_->crop_size_;
+	for (int r=0; r<=Dtype.rows-slide_size.height; r++)
+	{
+		for (int c=0; c<=Dtype.cols-slide_size.width; c++)
+		{
+			Rect roi(c, r, slide_size.width, slide_size.height);
+			if (pclf_->Predict(Dtype(roi))
+			{
+				rect_vec.push_back(roi);
+			}
+		}
+	}
+}
+
+
+
 

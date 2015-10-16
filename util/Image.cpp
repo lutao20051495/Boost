@@ -364,6 +364,11 @@ void ConvertColorToGray(const string& src_img_dir, const string& dst_img_dir, co
 		Mat gray_img;
 		cv::cvtColor(img, gray_img, CV_BGR2GRAY);
 		imwrite(img_name_sv, gray_img);
-	}
-	
+	}	
+}
+
+
+void Image::CvtImageType(Mat& src, Mat& dst, const string& img_type)
+{
+	if (img_type)
 }
