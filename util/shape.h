@@ -3,9 +3,9 @@ using namespace cv;
 
 void calCenterLocation(Rect& r, Point2d& center_location);
 
-void resizeRect(Rect& r, double scale);
+void ResizeRect(Rect& src, Rect& dst, float dx, float dy);
 
-void resizeRect(vector<Rect>& rect_vec, double scale);
+void ResizeRect(vector<Rect>& src_vec, vector<Rect>& dst_vec, float dx, float dy);
 
 void shiftRect(int shift_x, int shift_y, Rect& src_rect, Rect& dst_rect);
 

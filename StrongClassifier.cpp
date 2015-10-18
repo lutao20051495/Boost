@@ -140,7 +140,7 @@ float StrongClassifier::TrainingError(vector<Sample>& sample_vec)
 }
 
 
-int StrongClassifier::Predict(Sample& sample, int label_num)
+int StrongClassifier::Predict(const Sample& sample, int label_num)
 {
 	//two class
 	if(label_num<=2)
@@ -163,7 +163,7 @@ int StrongClassifier::Predict(Sample& sample, int label_num)
 	}
 }
 
-void StrongClassifier::Predict(Mat& img, float& score)
+void StrongClassifier::Predict(const Mat& img, float& score)
 {
         Mat resized_img;
         if(img.cols!=input_sample_size_.width
@@ -181,7 +181,7 @@ void StrongClassifier::Predict(Mat& img, float& score)
         return;
 }
 
-void StrongClassifier::Predict(Sample& sample, float& score)
+void StrongClassifier::Predict(const Sample& sample, float& score)
 {
         score = 0.0;
         for (unsigned int i=0; i<weak_clf_vec_.size(); i++)
@@ -283,4 +283,17 @@ bool StrongClassifier::Load(const string& model_dir)
         sclf_file.close();
 
         return true;
+}
+
+
+bool StrongClassifier::InputRaw()
+{
+        if (input_sample_type_ == "sample")
+        {
+                return false;
+        }
+        else
+        {
+                return true;
+        }
 }

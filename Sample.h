@@ -22,9 +22,11 @@ public:
 
         bool isPositive();
 
-        void getPatch(Rect& roi, Sample& sample_patch);
+        void getPatch(Rect& roi, Sample& sample_patch) const;
 
-        Size getSize();
+        Size getSize() const;
+        const Size size() const;
+        const Sample& operator () (Rect& roi) const;
 
         static void load(string& sample_dir, string& type, int label, vector<Sample>& sample_vec,
                                                                             int max_sample_num=1000000);

@@ -55,7 +55,6 @@ Sample::Sample(Size& size, FeatureChannel& fc, int label)
 }
 
 
-
 bool Sample::isPositive()
 {
         if(label_ == 1)
@@ -166,7 +165,7 @@ void Sample::genRandomNegSample(const vector<Mat>& img_vec, vector<Sample>& samp
 }
 
 
-void Sample::getPatch(Rect& roi, Sample& sample_patch)
+void Sample::getPatch(Rect& roi, Sample& sample_patch) const
 {
         FeatureChannel fc_patch;
         fc_.getPatch(roi, fc_patch);
@@ -176,9 +175,22 @@ void Sample::getPatch(Rect& roi, Sample& sample_patch)
 }
 
 
-Size Sample::getSize()
+Size Sample::getSize() const
 {
         return Size(width_, height_);
+}
+
+//campatible width opencv image structure
+const Size Sample::size() const
+{
+        return getSize();
+}
+
+const Sample& Sample::operator() (Rect& roi) const
+{
+        Sample patch;
+        getPatch(roi, patch);
+        return patch;
 }
 
 double Sample::calcPurity(vector<Sample>& sample_vec, vector<size_t>& index_vec)

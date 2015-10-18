@@ -16,6 +16,11 @@ public:
 	Size sample_size_normalized_;
 	Size crop_size_;
 	Size patch_size_;
+
+        //detection
+        Size min_object_size_;
+        Size max_object_size_;
+        float scale_step_;
 public:
         Evaluator();
         bool LoadParameter(const string& para_file_path);
@@ -33,7 +38,8 @@ public:
         float FalsePositiveRateMultiDir(const string& neg_img_dir, const string& sub_dir, const string& img_type, 
                 unsigned int& sum, unsigned int& err);
 	
-	void DetectOnImageMultiScale(const string& src_dir, const string& type, const string& save_dir, bool show);
+        void DetectOnImage(int argc, char* argv[]);
+	void DetectOnImageMultiScale(const string& src_dir, const string& type, const string& save_dir, const bool show);
 	void DetectOnImageMultiScale(const Mat& img, vector<Rect>& rect_vec);
 	template <typename Dtype>
 	void DetectOnImageSingleScale(const Dtype& input, vector<Rect>& rect_vec);

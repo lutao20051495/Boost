@@ -368,7 +368,20 @@ void ConvertColorToGray(const string& src_img_dir, const string& dst_img_dir, co
 }
 
 
-void Image::CvtImageType(Mat& src, Mat& dst, const string& img_type)
+void CvtImageType(const Mat& src, Mat& dst, const string& img_type)
 {
-	if (img_type)
+        if ((img_type=="COLOR")&&(src.channels()==1))
+        {
+                cvtColor(src, dst, CV_GRAY2BGR);
+        }
+        else if ((img_type=="GRAY")&&(src.channels()==3))
+        {
+                cvtColor(src, dst, CV_BGR2GRAY);
+        }
+        else
+        {
+                dst = src.clone();
+        }
+        
+        return;
 }

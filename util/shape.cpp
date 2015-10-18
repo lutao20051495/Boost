@@ -9,19 +9,20 @@ void calCenterLocation(Rect& r, Point2d& center_location)
         return;
 }
 
-void resizeRect(Rect& r, double scale)
+void ResizeRect(Rect& src, Rect& dst, float dx, float dy)
 {
-        r.x = r.x * scale;
-        r.y = r.y * scale;
-        r.width = r.width * scale;
-        r.height = r.height * scale;
+        dst.x = src.x * dx;
+        dst.y = src.y * dy;
+        dst.width = src.width * dx;
+        dst.height = src.height * dy;
 }
 
-void resizeRect(vector<Rect>& rect_vec, double scale)
+void ResizeRect(vector<Rect>& src_vec, vector<Rect>& dst_vec, float dx, float dy)
 {
-        for(unsigned int i=0; i<rect_vec.size(); i++)
+        dst_vec.resize(src_vec.size());
+        for(unsigned int i=0; i<src_vec.size(); i++)
         {
-                resizeRect(rect_vec[i], scale);
+                ResizeRect(src_vec[i], dst_vec[i], dx, dy);
         }
 }
 

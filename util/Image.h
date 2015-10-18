@@ -36,3 +36,5 @@ void GenRandPatch(const string& src_img_dir, const string& type, const string& d
 bool CropImagePatch(Mat& src_img, Size& crop_size, vector<Mat>& patch_vec);
 
 void ConvertColorToGray(const string& src_img_dir, const string& dst_img_dir, const string& type);
+
+void CvtImageType(const Mat& src, Mat& dst, const string& img_type);

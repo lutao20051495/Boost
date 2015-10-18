@@ -234,7 +234,7 @@ void FeatureChannel::splitAngleImage(Mat& angle_img, Mat& mag_img, vector<Mat>& 
 }
 
 
-void FeatureChannel::getPatch(Rect& roi, FeatureChannel& patch_fc)
+void FeatureChannel::getPatch(Rect& roi, FeatureChannel& patch_fc) const
 {
         Rect expand_roi(roi.x, roi.y, roi.width+1, roi.height+1);
         //Ç³¿½±´

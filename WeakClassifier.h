@@ -27,7 +27,7 @@ public:
                      float& sum_pos_weight,
                      float& sum_neg_weight);
 
-        int Predict(Sample& sample);
+        int Predict(const Sample& sample);
 
         void Save(const string& save_dir);
 

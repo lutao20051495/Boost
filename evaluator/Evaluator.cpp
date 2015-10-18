@@ -8,6 +8,7 @@ using namespace std;
 #include "Evaluator.h"
 #include "../util/File.h"
 #include "../util/Image.h"
+#include "../util/shape.h"
 #include "../Sample.h"
 #include "../StrongClassifier.h"
 
@@ -256,6 +257,10 @@ void Evaluator::Run(int argc,char *argv[])
         {
                 TestFpr(argc-1, argv+1);
         }
+        else if(string(argv[0])=="DetectOnImage")
+        {
+                DetectOnImage(argc-1, argv+1);
+        }
         else
         {
                 cout << "option of function error!" << endl;
@@ -345,7 +350,21 @@ void Evaluator::TestFpr(int argc, char* argv[])
 }
 
 
-void Evaluator::DetectOnImageMultiScale(const string& src_dir, const string& type, const string& save_dir, bool show)
+void Evaluator::DetectOnImage(int argc, char* argv[])
+{
+        assert(argc==6);
+        if (!CreateClassifier(string(argv[0]), string(argv[1])))
+        {
+                cout << "create classifier error: " << string(argv[0])
+                     << "\t" << string(argv[1]) << endl;
+                return;
+        }
+
+        DetectOnImageMultiScale(string(argv[2]), string(argv[3]), string(argv[4]), atoi(argv[5]));
+}
+
+
+void Evaluator::DetectOnImageMultiScale(const string& src_dir, const string& type, const string& save_dir, const bool show)
 {
 	vector<string> file_name_vec;
 	if (!GetFileName(src_dir, type, file_name_vec)
@@ -356,7 +375,7 @@ void Evaluator::DetectOnImageMultiScale(const string& src_dir, const string& typ
 	for (size_t i=0; i<file_name_vec.size(); i++)
 	{
 		string img_name = src_dir + "/" + file_name_vec[i];
-		Mat img = imread(file_name_vec);
+		Mat img = imread(img_name);
 		vector<Rect> rect_vec;
 		DetectOnImageMultiScale(img, rect_vec);
 		for (size_t j=0; j<rect_vec.size(); j++)
@@ -381,7 +400,7 @@ void Evaluator::DetectOnImageMultiScale(const Mat& img, vector<Rect>& rect_vec)
 	float scale_x = min_scale_x;
 	float scale_y = min_scale_y;
 	Mat cvt_img;
-	Image::CvtImage(img, cvt_img, pclf_->input_img_type_);
+	CvtImageType(img, cvt_img, pclf_->input_sample_type_);
 	while ((scale_x<=max_scale_x)&&(scale_y<=max_scale_y))
 	{
 		Mat resized_img;
@@ -396,8 +415,11 @@ void Evaluator::DetectOnImageMultiScale(const Mat& img, vector<Rect>& rect_vec)
 		    Sample sample(resized_img);
 		    DetectOnImageSingleScale(sample, scale_rect_vec);
 		}
-		ResizeRect(scale_rect_vec, scale_rect_vec, 1.0f/scale_x, 1,0f/scale_y);
+		ResizeRect(scale_rect_vec, scale_rect_vec, 1.0f/scale_x, 1.0f/scale_y);
 		rect_vec.insert(rect_vec.end(), scale_rect_vec.begin(), scale_rect_vec.end());
+
+                scale_x *= scale_step_;
+                scale_y *= scale_step_;
 	}
 }
 
@@ -405,15 +427,18 @@ template <typename Dtype>
 void Evaluator::DetectOnImageSingleScale(const Dtype& input, vector<Rect>& rect_vec)
 {
 	Size& slide_size = pclf_->crop_size_;
-	for (int r=0; r<=Dtype.rows-slide_size.height; r++)
+	for (int r=0; r<=input.size().height-slide_size.height; r++)
 	{
-		for (int c=0; c<=Dtype.cols-slide_size.width; c++)
+		for (int c=0; c<=input.size().width-slide_size.width; c++)
 		{
 			Rect roi(c, r, slide_size.width, slide_size.height);
-			if (pclf_->Predict(Dtype(roi))
-			{
-				rect_vec.push_back(roi);
-			}
+                        float score = 0;
+                        const Dtype sample = input(roi);
+			pclf_->Predict(sample, score);
+                        if (Positive(score))
+                        {
+                                rect_vec.push_back(roi);
+                        }
 		}
 	}
 }

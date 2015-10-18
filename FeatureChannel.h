@@ -49,7 +49,7 @@ public:
 
         //void FeatureChannel::cropTo(FeatureChannel& patch_fc, Rect& roi);
 
-        void getPatch(Rect& roi, FeatureChannel& patch_fc);
+        void getPatch(Rect& roi, FeatureChannel& patch_fc) const;
 
         void splitAngleImage(Mat& angle_img, Mat& mag_img, vector<Mat>& angle_img_vec);
 

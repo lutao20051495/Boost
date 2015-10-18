@@ -154,7 +154,7 @@ void WeakClassifier::SumSampleWeight(vector<size_t>& sample_index_vec,
 }
 
 
-int WeakClassifier::Predict(Sample& sample)
+int WeakClassifier::Predict(const Sample& sample)
 {
         if(pfeature_->featureValue(sample))
         {

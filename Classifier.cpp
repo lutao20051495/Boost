@@ -4,7 +4,12 @@ void Classifier::Train(vector<size_t>& sample_index_vec, const string& save_mode
 {
         return;
 }
-void Classifier::Predict(Mat& img, float& score)
+void Classifier::Predict(const Mat& img, float& score)
+{
+	return;
+}
+
+void Classifier::Predict(const Sample& img, float& score)
 {
 	return;
 }
@@ -20,6 +25,11 @@ void Classifier::Save(const string& model_dir)
 }
 
 bool Classifier::Load(const string& model_dir)
+{
+        return true;
+}
+
+bool Classifier::InputRaw()
 {
         return true;
 }
