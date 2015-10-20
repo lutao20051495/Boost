@@ -372,6 +372,10 @@ void Evaluator::DetectOnImageMultiScale(const string& src_dir, const string& typ
 	{
 		return;
 	}
+	if (!FileExist(save_dir))
+	{
+	    CreateDir(save_dir);
+	}
 	for (size_t i=0; i<file_name_vec.size(); i++)
 	{
 		string img_name = src_dir + "/" + file_name_vec[i];
@@ -386,6 +390,9 @@ void Evaluator::DetectOnImageMultiScale(const string& src_dir, const string& typ
 		{
 			imshow("detection", img);
 		}
+		
+		string save_img_name = save_dir + "/" + file_name_vec[i];
+		imwrite(save_img_name, img);
 	}
 }
 
