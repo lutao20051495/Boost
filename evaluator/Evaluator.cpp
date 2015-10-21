@@ -8,6 +8,7 @@ using namespace std;
 #include "Evaluator.h"
 #include "../util/File.h"
 #include "../util/Image.h"
+#include "../util/draw.h"
 #include "../util/shape.h"
 #include "../Sample.h"
 #include "../StrongClassifier.h"
@@ -370,6 +371,87 @@ void Evaluator::DetectOnImage(int argc, char* argv[])
         }
 
         DetectOnImageMultiScale(string(argv[2]), string(argv[3]), string(argv[4]), atoi(argv[5]));
+}
+
+
+void Evaluator::DetectInVideo(int argc, char* argv[])
+{
+        assert(argc==6);
+        if (!CreateClassifier(string(argv[0]), string(argv[1])))
+        {
+                cout << "create classifier error: " << string(argv[0])
+                     << "\t" << string(argv[1]) << endl;
+                return;
+        }
+
+        DetectInVideo(string(argv[2]), string(argv[3]), string(argv[4]), atoi(argv[5]));
+}
+
+
+void Evaluator::DetectInVideo(const string& src_dir, const string& type, const string& save_dir, const bool show)
+{
+	vector<string> file_name_vec;
+	if (!GetFileName(src_dir, type, file_name_vec)
+		|| file_name_vec.size()<=0)
+	{
+		return;
+	}
+	if (!FileExist(save_dir))
+	{
+	    CreateDir(save_dir);
+	}
+
+        for (size_t i=0; i<file_name_vec.size(); i++)
+        {
+                string video_name = src_dir + "/" + file_name_vec[i];
+                string save_video_name = save_dir + "/" + file_name_vec[i];
+                /*
+                cv::VideoCapture video(video_name);
+                if (!video.isOpened())
+                {
+                        cout << "failed to open video: " << video_name << endl;
+                        continue;
+                }
+                */
+                DetectInVideo(video_name, save_video_name, show);
+        }
+}
+
+void Evaluator::DetectInVideo(const string& video_name, const string& save_video_name, bool show)
+{
+        cv::VideoCapture video(video_name);
+        if (!video.isOpened())
+        {
+                cout << "failed to open video: " << video_name << endl;
+                return;
+        }
+        Mat frame;
+        if (!video.read(frame))
+        {
+                return;
+        }
+        cv::VideoWriter save_video(save_video_name, CV_FOURCC('M', 'J', 'P', 'G'), 25.0, frame.size());
+        
+        while (1)
+        {
+                vector<Rect> rect_vec(0);
+                DetectOnImageMultiScale(frame, rect_vec);
+                DrawRect(frame, rect_vec, Scalar(255,0,0));
+                if (show)
+                {
+                        imshow("DetectInVideo", frame);
+                        waitKey();
+                }
+
+                save_video << frame;
+
+                if (!video.read(frame))
+                {
+                        break;
+                }
+        }
+
+        return;
 }
 
 
