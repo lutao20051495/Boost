@@ -14,7 +14,7 @@ public:
         vector<float> aux_feature_vec_;
         static vector<Sample> train_sample_vec_;
 public:
-        Sample(){};
+        Sample(){aux_feature_vec_.clear(); label_=0; width_=height_=0;}
         Sample(Size& s, int label=0);
         Sample(unsigned int patch_width, unsigned int patch_height, int label);
         Sample(Mat& img, int label=0);
@@ -26,7 +26,7 @@ public:
 
         Size getSize() const;
         const Size size() const;
-        const Sample& operator () (Rect& roi) const;
+        const Sample operator () (Rect& roi) const;
 
         static void load(string& sample_dir, string& type, int label, vector<Sample>& sample_vec,
                                                                             int max_sample_num=1000000);

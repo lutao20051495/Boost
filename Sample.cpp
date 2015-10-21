@@ -167,10 +167,12 @@ void Sample::genRandomNegSample(const vector<Mat>& img_vec, vector<Sample>& samp
 
 void Sample::getPatch(Rect& roi, Sample& sample_patch) const
 {
-        FeatureChannel fc_patch;
-        fc_.getPatch(roi, fc_patch);
+        //FeatureChannel fc_patch;
+        fc_.getPatch(roi, sample_patch.fc_);
 	Size patch_size = roi.size();
-        sample_patch = Sample(patch_size, fc_patch);
+        //sample_patch = Sample(patch_size, fc_patch);
+	sample_patch.width_ = patch_size.width;
+	sample_patch.height_ = patch_size.height;
         return;
 }
 
@@ -186,7 +188,7 @@ const Size Sample::size() const
         return getSize();
 }
 
-const Sample& Sample::operator() (Rect& roi) const
+const Sample Sample::operator() (Rect& roi) const
 {
         Sample patch;
         getPatch(roi, patch);
