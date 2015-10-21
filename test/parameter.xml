@@ -18,8 +18,7 @@
 	<min_object_width>96</min_object_width>
  	<min_object_height>96</min_object_height>
 	<scale_step>1.125</scale_step>
-	<width_step>0.125</width_step>
-	<height_step>0.125</height_step>
+	<shift_step>0.125</width_step>
 	
 </Evaluator>
 </opencv_storage>

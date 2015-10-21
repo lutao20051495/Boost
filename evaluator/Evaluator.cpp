@@ -37,7 +37,16 @@ bool Evaluator::LoadParameter(const string& para_file_path)
         load_all_neg_img_ = (int)fn["load_all_neg_image"];
         sample_patch_num_ = fn["patch_per_image"];
         display_ = fn["display"];
-
+	
+	
+	//detection parameter
+	min_object_size_.width = fn["min_object_width"];
+	min_object_size_.height = fn["min_object_height"];
+	max_object_size_.width = fn["max_object_width"];
+	max_object_size_.height = fn["max_object_height"];
+	
+	shift_step_ = fn["shift_step"];
+	scale_step_ = fn["scale_step"];
         return true;
 }
 
@@ -389,6 +398,7 @@ void Evaluator::DetectOnImageMultiScale(const string& src_dir, const string& typ
 		if (show)
 		{
 			imshow("detection", img);
+			waitKey();
 		}
 		
 		string save_img_name = save_dir + "/" + file_name_vec[i];
@@ -408,6 +418,8 @@ void Evaluator::DetectOnImageMultiScale(const Mat& img, vector<Rect>& rect_vec)
 	float scale_y = min_scale_y;
 	Mat cvt_img;
 	CvtImageType(img, cvt_img, pclf_->input_sample_type_);
+	int shift_step_x = pclf_->crop_size_.width*shift_step_;
+	int shift_step_y = pclf_->crop_size_.height*shift_step_;
 	while ((scale_x<=max_scale_x)&&(scale_y<=max_scale_y))
 	{
 		Mat resized_img;
@@ -415,12 +427,12 @@ void Evaluator::DetectOnImageMultiScale(const Mat& img, vector<Rect>& rect_vec)
 		vector<Rect> scale_rect_vec;
 		if (pclf_->InputRaw())
 		{
-		    DetectOnImageSingleScale(resized_img, scale_rect_vec);
+		    DetectOnImageSingleScale(resized_img, scale_rect_vec, shift_step_x, shift_step_y);
 		}
 		else
 		{
 		    Sample sample(resized_img);
-		    DetectOnImageSingleScale(sample, scale_rect_vec);
+		    DetectOnImageSingleScale(sample, scale_rect_vec, shift_step_x, shift_step_y);
 		}
 		ResizeRect(scale_rect_vec, scale_rect_vec, 1.0f/scale_x, 1.0f/scale_y);
 		rect_vec.insert(rect_vec.end(), scale_rect_vec.begin(), scale_rect_vec.end());
@@ -431,12 +443,12 @@ void Evaluator::DetectOnImageMultiScale(const Mat& img, vector<Rect>& rect_vec)
 }
 
 template <typename Dtype>
-void Evaluator::DetectOnImageSingleScale(const Dtype& input, vector<Rect>& rect_vec)
+void Evaluator::DetectOnImageSingleScale(const Dtype& input, vector<Rect>& rect_vec, int shift_step_x, int shift_step_y)
 {
 	Size& slide_size = pclf_->crop_size_;
-	for (int r=0; r<=input.size().height-slide_size.height; r++)
+	for (int r=0; r<=input.size().height-slide_size.height; r+=shift_step_y)
 	{
-		for (int c=0; c<=input.size().width-slide_size.width; c++)
+		for (int c=0; c<=input.size().width-slide_size.width; c+=shift_step_x)
 		{
 			Rect roi(c, r, slide_size.width, slide_size.height);
                         float score = 0;

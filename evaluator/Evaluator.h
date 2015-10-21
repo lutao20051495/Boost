@@ -21,6 +21,7 @@ public:
         Size min_object_size_;
         Size max_object_size_;
         float scale_step_;
+	float shift_step_;
 public:
         Evaluator();
         bool LoadParameter(const string& para_file_path);
@@ -42,6 +43,6 @@ public:
 	void DetectOnImageMultiScale(const string& src_dir, const string& type, const string& save_dir, const bool show);
 	void DetectOnImageMultiScale(const Mat& img, vector<Rect>& rect_vec);
 	template <typename Dtype>
-	void DetectOnImageSingleScale(const Dtype& input, vector<Rect>& rect_vec);
+	void DetectOnImageSingleScale(const Dtype& input, vector<Rect>& rect_vec, int shift_step_x, int shift_step_y);
 };
 
