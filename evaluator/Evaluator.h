@@ -45,8 +45,8 @@ public:
 	template <typename Dtype>
 	void DetectOnImageSingleScale(const Dtype& input, vector<Rect>& rect_vec, int shift_step_x, int shift_step_y);
 
-        void Evaluator::DetectInVideo(int argc, char* argv[]);
-        void Evaluator::DetectInVideo(const string& src_dir, const string& type, const string& save_dir, const bool show=false);
-        void Evaluator::DetectInVideo(const string& video_name, const string& save_video_name, bool show=false);
+        void DetectInVideo(int argc, char* argv[]);
+        void DetectInVideo(const string& src_dir, const string& type, const string& save_dir, const bool show=false);
+        void DetectInVideo(const string& video_name, const string& save_video_name, bool show=false);
 };
 
